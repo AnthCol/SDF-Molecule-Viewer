@@ -1,1 +1,5 @@
 /libmol.so
+/molecule.py
+/*.o
+/*.so
+
