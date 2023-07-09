@@ -12,43 +12,54 @@
 */
 
 
-void atomset(atom *atom, char element[3], double *x, double *y, double *z){
+void atomset(atom *atom, char element[3], double *x, double *y, double *z)
+{
     
-    if (element[1] == '\0'){ 
-        (*atom).element[0] = element[0]; 
-        (*atom).element[1] = '\0'; 
+    if (element[1] == '\0')
+    { 
+        atom->element[0] = element[0]; 
+        atom->element[1] = '\0'; 
     }
-    else if (element[2] == '\0'){ 
-        (*atom).element[0] = element[0]; 
-        (*atom).element[1] = element[1]; 
+    else if (element[2] == '\0')
+    { 
+        atom->element[0] = element[0]; 
+        atom->element[1] = element[1]; 
     }
-    else (*atom).element[0] = '\0'; 
+    else 
+    {
+        atom->.element[0] = '\0'; 
+    }
 
-    (*atom).element[2] = '\0'; 
 
-    if (x != NULL) (*atom).x = *x; 
-    if (y != NULL) (*atom).y = *y;
-    if (z != NULL) (*atom).z = *z; 
+    atom->element[2] = '\0'; 
+
+
+    if (x != NULL) atom->x = *x; 
+    if (y != NULL) atom->y = *y;
+    if (z != NULL) atom->z = *z; 
+    
+
     return; 
 }
 
 
-void atomget(atom *atom, char element[3], double *x, double *y, double *z){
-
+void atomget(atom *atom, char element[3], double *x, double *y, double *z)
+{
     if (atom == NULL) return; 
 
-    element[0] = (*atom).element[0]; 
-    element[1] = (*atom).element[1]; 
+    element[0] = atom->element[0]; 
+    element[1] = atom->element[1]; 
     element[2] = '\0'; 
 
-    *x = (*atom).x; 
-    *y = (*atom).y; 
-    *z = (*atom).z; 
-
+    *x = atom->x; 
+    *y = atom->y; 
+    *z = atom->z; 
+    
+    return;
 }
 
-void compute_coords(bond *bond){
-
+void compute_coords(bond *bond)
+{
     unsigned short index_one = (*bond).a1; 
     unsigned short index_two = (*bond).a2;
 
@@ -74,7 +85,8 @@ void compute_coords(bond *bond){
     return; 
 }
 
-void bondset( bond *bond, unsigned short *a1, unsigned short *a2, atom **atoms, unsigned char *epairs){
+void bondset( bond *bond, unsigned short *a1, unsigned short *a2, atom **atoms, unsigned char *epairs)
+{
     if (bond == NULL || a1 == NULL || a2 == NULL || atoms == NULL || epairs == NULL) return; 
 
     (*bond).a1 = *a1; 
@@ -88,7 +100,8 @@ void bondset( bond *bond, unsigned short *a1, unsigned short *a2, atom **atoms, 
 }
 
 
-void bondget( bond *bond, unsigned short *a1, unsigned short *a2, atom **atoms, unsigned char *epairs){
+void bondget( bond *bond, unsigned short *a1, unsigned short *a2, atom **atoms, unsigned char *epairs)
+{
     if (bond == NULL) return; 
 
     *a1 = (*bond).a1; 
@@ -99,47 +112,36 @@ void bondget( bond *bond, unsigned short *a1, unsigned short *a2, atom **atoms, 
     return; 
 }
 
-molecule * molmalloc(unsigned short atom_max, unsigned short bond_max){
+molecule * molmalloc(unsigned short atom_max, unsigned short bond_max)
+{
 
     // If at any point malloc fails, free everything up to that point and return NULL
     
+    int fail_flag = 0; 
+
 
     molecule * mol = (molecule*)malloc(sizeof(molecule)); 
     if (mol == NULL) return NULL;
-
+    
     (*mol).atom_max = atom_max; 
-    (*mol).atom_no = 0; 
+    (*mol).atom_no  = 0; 
     (*mol).bond_max = bond_max; 
-    (*mol).bond_no = 0; 
-
-    (*mol).atoms = (atom*)malloc(sizeof(atom) * atom_max); 
-    if ((*mol).atoms == NULL) {
-        free(mol); 
-        return NULL;
-    } 
-
-    (*mol).bonds = (bond*)malloc(sizeof(bond) * bond_max); 
-    if ((*mol).bonds == NULL) {
-        free((*mol).atoms); 
-        free(mol); 
-        return NULL; 
-    }
-
+    (*mol).bond_no  = 0; 
+    
+    (*mol).atoms     = (atom*)malloc(sizeof(atom) * atom_max); 
+    (*mol).bonds     = (bond*)malloc(sizeof(bond) * bond_max); 
     (*mol).atom_ptrs = (atom**)malloc(sizeof(atom*) * atom_max); 
-
-    if ((*mol).atom_ptrs == NULL){
-        free((*mol).atoms); 
-        free((*mol).bonds); 
-        free(mol); 
-        return NULL; 
-    }
-
     (*mol).bond_ptrs = (bond**)malloc(sizeof(bond*) * bond_max); 
-    if ((*mol).bond_ptrs == NULL){
+
+    
+    if ( (*mol).atoms == NULL || (*mol).bonds == NULL || (*mol).atom_ptrs == NULL || (*mol).bond_ptrs == NULL)
+    {
         free((*mol).atoms); 
-        free((*mol).bonds); 
+        free((*mol).bonds);
         free((*mol).atom_ptrs); 
+        free((*mol).bond_ptrs); 
         free(mol); 
+
         return NULL; 
     }
 
@@ -150,7 +152,8 @@ molecule * molmalloc(unsigned short atom_max, unsigned short bond_max){
     return mol; 
 }
 
-molecule * molcopy(molecule *src){
+molecule * molcopy(molecule *src)
+{
 
     if (src == NULL) return NULL; 
 
@@ -167,8 +170,10 @@ molecule * molcopy(molecule *src){
     return m; 
 }
 
-void molfree(molecule *ptr){
+void molfree(molecule *ptr)
+{
     if (ptr == NULL) return; 
+
     free((*ptr).atoms); 
     free((*ptr).bonds); 
     free((*ptr).atom_ptrs); 
@@ -179,40 +184,51 @@ void molfree(molecule *ptr){
 }
 
 
-void molappend_atom(molecule *molecule, atom *atom){
+void molappend_atom(molecule *molecule, atom *atom)
+{
    
     if (molecule == NULL || atom == NULL) return; 
     
-    if ((*molecule).atom_no == (*molecule).atom_max){
+    if ((*molecule).atom_no == (*molecule).atom_max)
+    {
 
         (*molecule).atom_max = ((*molecule).atom_max < 1) ? 1 : (*molecule).atom_max * 2;
 
         (*molecule).atoms = realloc((*molecule).atoms, (*molecule).atom_max * sizeof(struct atom)); 
-        if ((*molecule).atoms == NULL){
+       
+        if ((*molecule).atoms == NULL)
+        {
             printf("##### Realloc for atoms returned NULL #####\n"); 
             exit(1); 
         }
 
         (*molecule).atom_ptrs = realloc((*molecule).atom_ptrs, (*molecule).atom_max * sizeof(struct atom*)); 
-        if ((*molecule).atom_ptrs == NULL){
+        
+        if ((*molecule).atom_ptrs == NULL)
+        {
             printf("##### Realloc for atom_ptrs returned NULL #####\n"); 
             exit(1); 
         }
 
         
-        for (int i = 0; i < (*molecule).atom_no; i++) (*molecule).atom_ptrs[i] = &(*molecule).atoms[i]; 
+        for (int i = 0; i < (*molecule).atom_no; i++)
+        {
+            (*molecule).atom_ptrs[i] = &(*molecule).atoms[i]; 
+        }
 
-        // update bond pointers here since we realloc it?
-        for (int i = 0; i < (*molecule).bond_no; i++){
+
+        for (int i = 0; i < (*molecule).bond_no; i++)
+        {
             unsigned short a1 = (*molecule).bonds[i].a1; 
             unsigned short a2 = (*molecule).bonds[i].a2; 
             (*molecule).bonds[i].atoms[a1] = (*molecule).atoms[a1]; 
             (*molecule).bonds[i].atoms[a2] = (*molecule).atoms[a2]; 
         }
+    
     }
 
     memcpy(&(*molecule).atoms[(*molecule).atom_no], &(*atom), sizeof(struct atom)); 
-    //(*molecule).atoms[(*molecule).atom_no] = *atom; //should also work?
+    
     (*molecule).atom_ptrs[(*molecule).atom_no] = &(*molecule).atoms[(*molecule).atom_no];
     (*molecule).atom_no++; 
     
@@ -220,7 +236,8 @@ void molappend_atom(molecule *molecule, atom *atom){
     return; 
 }
 
-void molappend_bond(molecule *molecule, bond *bond){
+void molappend_bond(molecule *molecule, bond *bond)
+{
 
     if (molecule == NULL || bond == NULL) return; 
 
@@ -243,15 +260,14 @@ void molappend_bond(molecule *molecule, bond *bond){
     }
    
     memcpy(&(*molecule).bonds[(*molecule).bond_no], &(*bond), sizeof(struct bond)); 
-
-    //(*molecule).bonds[(*molecule).bond_no] = *bond;// should also work?
     (*molecule).bond_ptrs[(*molecule).bond_no] = &(*molecule).bonds[(*molecule).bond_no]; 
     (*molecule).bond_no++; 
 
     return; 
 }
 
-int cmp_atom(const void * a, const void * b){ 
+int cmp_atom(const void * a, const void * b)
+{ 
 
     double a_val = (*(*(atom**)a)).z; 
     double b_val = (*(*(atom**)b)).z; 
@@ -259,7 +275,8 @@ int cmp_atom(const void * a, const void * b){
     return (a_val > b_val) - (a_val < b_val); 
 }
 
-int bond_comp(const void *a, const void *b){
+int bond_comp(const void *a, const void *b)
+{
 
     double a_val = (*(*(bond**)a)).z; 
     double b_val = (*(*(bond**)b)).z; 
@@ -267,18 +284,27 @@ int bond_comp(const void *a, const void *b){
     return (a_val > b_val) - (a_val < b_val); 
 }
 
-void molsort(molecule *molecule){
+void molsort(molecule *molecule)
+{
 
     if (molecule == NULL) return; 
 
-    if ((*molecule).atom_no > 1) qsort((*molecule).atom_ptrs, (*molecule).atom_no, sizeof(atom**), cmp_atom); 
-    if ((*molecule).bond_no > 1) qsort((*molecule).bond_ptrs, (*molecule).bond_no, sizeof(bond**), bond_comp); 
+    if ((*molecule).atom_no > 1) 
+    {
+        qsort((*molecule).atom_ptrs, (*molecule).atom_no, sizeof(atom**), cmp_atom); 
+    }
+    
+    if ((*molecule).bond_no > 1)
+    {
+        qsort((*molecule).bond_ptrs, (*molecule).bond_no, sizeof(bond**), bond_comp); 
+    }
 
     return; 
 }
 
 
-void xrotation(xform_matrix xform_matrix, unsigned short deg){
+void xrotation(xform_matrix xform_matrix, unsigned short deg)
+{
 
     double rad = deg * (M_PI / 180.0); 
 
@@ -297,7 +323,10 @@ void xrotation(xform_matrix xform_matrix, unsigned short deg){
 
     return; 
 }
-void yrotation(xform_matrix xform_matrix, unsigned short deg){
+
+
+void yrotation(xform_matrix xform_matrix, unsigned short deg)
+{
 
     double rad = deg * (M_PI / 180.0); 
 
@@ -318,7 +347,8 @@ void yrotation(xform_matrix xform_matrix, unsigned short deg){
 }
 
 
-void zrotation(xform_matrix xform_matrix, unsigned short deg){
+void zrotation(xform_matrix xform_matrix, unsigned short deg)
+{
 
     double rad = deg * (M_PI / 180.0); 
 
@@ -339,15 +369,17 @@ void zrotation(xform_matrix xform_matrix, unsigned short deg){
 }
 
 
-void mol_xform(molecule *molecule, xform_matrix matrix){
+void mol_xform(molecule *molecule, xform_matrix matrix)
+{
 
     double x_val, y_val, z_val; 
 
-    for (int i = 0; i < (*molecule).atom_no; i++){
+    for (int i = 0; i < molecule->atom_no; i++)
+    {
 
-        x_val = (*molecule).atoms[i].x; 
-        y_val = (*molecule).atoms[i].y; 
-        z_val = (*molecule).atoms[i].z; 
+        x_val = molecule->atoms[i].x; 
+        y_val = molecule->atoms[i].y; 
+        z_val = molecule->atoms[i].z; 
 
         // multiply row 1 of the matrix by column 1 of the vector 
 
@@ -356,11 +388,12 @@ void mol_xform(molecule *molecule, xform_matrix matrix){
         (*molecule).atoms[i].y = (matrix[1][0] * x_val) + (matrix[1][1] * y_val) + (matrix[1][2] * z_val); 
         // multiply row 3 of the matrix by column 1 of the vector 
         (*molecule).atoms[i].z = (matrix[2][0] * x_val) + (matrix[2][1] * y_val) + (matrix[2][2] * z_val);  
-
-
     }
 
-    for (int i = 0; i < (*molecule).bond_no; i++) compute_coords(&(*molecule).bonds[i]); 
+    for (int i = 0; i < (*molecule).bond_no; i++)
+    {
+        compute_coords(&(*molecule).bonds[i]); 
+    }
 
     return; 
 }
