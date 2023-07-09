@@ -1,7 +1,7 @@
 CC = clang
 CFLAGS = -std=c99 -Wall -pedantic -g
 PY_PATH = /usr/include/python3.11
-PY_LIB_PATH = /usr/lib64/python3.11/config-3.11-x86_64-linux-gnu #/python3.11/site-packages/setuptools #/usr/lib/python3.11/config-3.7m-x86_64-linux-gnu
+PY_LIB_PATH = /usr/lib64/python3.11/config-3.11-x86_64-linux-gnu 
 
 all: libmol.so mol.o swig molecule_wrap.o _molecule.so 
 
