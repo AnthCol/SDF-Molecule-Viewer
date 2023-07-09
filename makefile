@@ -1,7 +1,7 @@
 CC = clang
 CFLAGS = -std=c99 -Wall -pedantic -g
 PY_PATH = /usr/include/python3.11
-PY_LIB_PATH = /usr/lib/python3.11/config-3.7m-x86_64-linux-gnu
+PY_LIB_PATH = /usr/lib64/python3.11/config-3.11-x86_64-linux-gnu #/python3.11/site-packages/setuptools #/usr/lib/python3.11/config-3.7m-x86_64-linux-gnu
 
 all: libmol.so mol.o swig molecule_wrap.o _molecule.so 
 
@@ -21,4 +21,4 @@ molecule_wrap.o: molecule_wrap.c
 	$(CC) $(CFLAGS) -I$(PY_PATH) -c molecule_wrap.c -fPIC -o molecule_wrap.o
 
 _molecule.so: molecule_wrap.o libmol.so
-	$(CC) molecule_wrap.o -shared -L. -lmol -L$(PY_LIB_PATH) -lpython3.7m -dynamiclib -o _molecule.so 
+	$(CC) molecule_wrap.o -shared -L. -lmol -L$(PY_LIB_PATH) -lpython3.11 -dynamiclib -o _molecule.so 
