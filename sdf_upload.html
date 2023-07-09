@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title> Upload .sdf file </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"> </script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  
+  <body>
+    <h1> Upload .sdf file </h1>
+
+    <ul>
+        <li><a href="add_remove.html">Add and/or Remove Elements</a></li>
+        <li><a href="sdf_upload.html">Upload .sdf file</a></li>
+        <li><a href="select_display.html">Select and Display Molecules</a></li>
+    </ul>
+
+    <br>
+    <!-- method="post" -->
+    <!-- method="post" -->
+    <form id = "sdf_form" action= "/sdf_upload.html" enctype="multipart/form-data" method="post">
+        <p>
+            <input id = "sdf_file_input" type="file" id="sdf_file" accept=".sdf" name="filename"/>
+        </p>
+        <p>
+            Please enter a name for the molecule you uploaded below:
+        </p>
+        <p>
+            <input id = "sdf_molecule_name" type="text" id="mol_name" name = "molecule_name"/>
+        </p>
+        <p>
+            <input id = "sdf_button" type="submit" value="Upload" />
+        </p>
+    </form>
+
+
+
+  </body>
+</html>
