@@ -1,17 +1,5 @@
 #include "mol.h"
 
-/*
-
-    Anthony Colaiacovo
-    1091370
-    
-    February 28th, 2023
-
-    CIS 2750 - Assignment 2
-
-*/
-
-
 void atomset(atom *atom, char element[3], double *x, double *y, double *z)
 {
     
@@ -395,6 +383,7 @@ void mol_xform(molecule *molecule, xform_matrix matrix)
     return; 
 }
 
+/*
 void rotationsfree( rotations *rotations ){
     return; 
 }
@@ -402,4 +391,4 @@ void rotationsfree( rotations *rotations ){
 rotations *spin( molecule *mol ){
     return NULL; 
 }
-
+*/

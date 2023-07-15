@@ -6109,51 +6109,6 @@ SWIGINTERN PyObject *rotations_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject
   return SWIG_Python_InitShadowInstance(args);
 }
 
-SWIGINTERN PyObject *_wrap_spin(PyObject *self, PyObject *args) {
-  PyObject *resultobj = 0;
-  molecule *arg1 = (molecule *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  rotations *result = 0 ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_molecule, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "spin" "', argument " "1"" of type '" "molecule *""'"); 
-  }
-  arg1 = (molecule *)(argp1);
-  result = (rotations *)spin(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_rotations, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_rotationsfree(PyObject *self, PyObject *args) {
-  PyObject *resultobj = 0;
-  rotations *arg1 = (rotations *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_rotations, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "rotationsfree" "', argument " "1"" of type '" "rotations *""'"); 
-  }
-  arg1 = (rotations *)(argp1);
-  rotationsfree(arg1);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 static PyMethodDef SwigMethods[] = {
 	 { "atom_element_set", _wrap_atom_element_set, METH_VARARGS, NULL},
 	 { "atom_element_get", _wrap_atom_element_get, METH_O, NULL},
@@ -6254,8 +6209,6 @@ static PyMethodDef SwigMethods[] = {
 	 { "delete_rotations", _wrap_delete_rotations, METH_O, NULL},
 	 { "rotations_swigregister", rotations_swigregister, METH_O, NULL},
 	 { "rotations_swiginit", rotations_swiginit, METH_VARARGS, NULL},
-	 { "spin", _wrap_spin, METH_O, NULL},
-	 { "rotationsfree", _wrap_rotationsfree, METH_O, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 

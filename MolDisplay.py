@@ -2,13 +2,6 @@ import molecule
 import re 
 
 
-# Anthony Colaiacovo
-# 1091370
-# April 5th 2023
-# CIS 2750 A4
-
-
-
 # radius = { 'H': 25, 
 #            'C': 40, 
 #            'O': 40, 

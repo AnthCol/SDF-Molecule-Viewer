@@ -239,8 +239,7 @@ class Database():
             for i in range(len(molecule_ids)):
                 atom_list = self.conn.execute("SELECT ATOM_ID FROM MoleculeAtom WHERE MOLECULE_ID='" + str(molecule_ids[i]) + "'").fetchall()
                 bond_list = self.conn.execute("SELECT BOND_ID FROM MoleculeBond WHERE MOLECULE_ID='" + str(molecule_ids[i]) + "'").fetchall()
-
-               ret_string += format % (molecule_names[i], len(atom_list), len(bond_list))
+                ret_string += format % (molecule_names[i], len(atom_list), len(bond_list))
 
         ret_string += "</table>"
 

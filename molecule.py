@@ -207,9 +207,3 @@ class rotations(object):
 # Register rotations in _molecule:
 _molecule.rotations_swigregister(rotations)
 
-def spin(mol):
-    return _molecule.spin(mol)
-
-def rotationsfree(rotations):
-    return _molecule.rotationsfree(rotations)
-

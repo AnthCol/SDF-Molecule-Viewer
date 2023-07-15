@@ -1,15 +1,3 @@
-// typedefs
-/*
-
-    Anthony Colaiacovo
-    1091370
-    
-    February 28th, 2023
-
-    CIS 2750 - Assignment 2
-
-*/
-
 
 #ifndef _MOL_H
 #define _MOL_H
@@ -86,8 +74,8 @@ typedef struct rotations
   molecule *z[72];
 } rotations;
 
-rotations *spin( molecule *mol );
-void rotationsfree( rotations *rotations );
+//rotations *spin( molecule *mol );
+//void rotationsfree( rotations *rotations );
 
 
 #endif
