@@ -1,6 +1,6 @@
 import io
 import sys
-import cgi
+import json
 import molsql
 import urllib
 import MolDisplay
@@ -26,8 +26,17 @@ class http_server(BaseHTTPRequestHandler):
 
 
 
-
+    # GET requests should only retrieve data
+    # In our case, this should occur when we need to retrieve a molecule
+    # from the database, and display it on the screen. 
+    # We will create a custom svg screen with a back-button. 
+ 
     def do_GET(self):
+        content_length = self.headers.get("Content-Length")
+        #body           = self.rfile.read(content_length)
+        #get_variables  = urllib.parse.parse_qs(body.decode("utf-8"))
+        
+
         if (self.path == "/"):
             self.path = "/sdf-form"
             fptr = open("frontend/sdf_upload.html")
@@ -39,26 +48,29 @@ class http_server(BaseHTTPRequestHandler):
         
         return 
 
+    # POST requests should only deal with things that cause a change in state, 
+    # or side effects on the server. In this case, it would be 
+    # add/remove an element to/from the database, as well as 
+    # adding a molecule through the file upload
 
     def do_POST(self):
+        
+        if (self.path == "/sdf-form" or self.path == "/"):
+            content_length = int(self.headers["Content-Length"])
+            post_data      = self.rfile.read(content_length)
+            
+            print("#################################")
+            print(post_data)
+            print("##################################")
 
-        if (self.path == "/sdf-form"):
-        
-            form_data = cgi.FieldStorage(
-                fp      = self.rfile, 
-                headers = self.headers, 
-                environ = {"REQUEST_METHOD" : "POST"}
-            )
-            
-            name = form_data["sdf_molecule_name"]
-            file = form_data["sdf_file"].read()
-        
-            sdf = io.TextIOWrapper(file)
-            
+            data           = json.loads(post_data.decode("utf-8"))
+
+            print("printing with do_POST")
+            print(data)
 
             # Only add the molecule to the database if it isn't in there 
-            if (not db.molecule_exists(name)):
-                db.add_molecule(name, sdf)
+            #if (not db.molecule_exists(name)):
+            #    db.add_molecule(name, sdf_file)
             
 
             
