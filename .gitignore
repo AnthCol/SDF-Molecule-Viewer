@@ -2,4 +2,5 @@
 /molecule.py
 /*.o
 /*.so
-
+/molecule.i
+/molecule_wrap.c
