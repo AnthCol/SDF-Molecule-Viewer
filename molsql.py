@@ -3,12 +3,6 @@ import molecule
 import MolDisplay
 import os
 
-
-# Anthony Colaiacovo
-# 1091370
-# April 5th 2023
-# CIS 2750 A4
-
 class Database():
 
     def __init__(self, reset = True): #reset = False
@@ -182,7 +176,8 @@ class Database():
             radius_map[data[i][0]] = data[i][1]
 
         return radius_map
-    
+   
+   
     def element_name(self):
         element_map = {}
 
@@ -192,7 +187,9 @@ class Database():
             element_map[data[i][0]] = data[i][1]
 
         return element_map 
-    
+  
+
+
     def radial_gradients(self):
         radialGradientSVG = """
         <radialGradient id="%s" cx="-50%%" cy="-50%%" r="220%%" fx="20%%" fy="20%%">
@@ -207,9 +204,9 @@ class Database():
         for i in range(len(data_list)):
             ret_string += radialGradientSVG % (data_list[i][0], data_list[i][1], data_list[i][2], data_list[i][3])
         
-
         return ret_string 
-    
+   
+
     def fetch_all_molecules(self):
         ret_string = """
                     <table style = \"width: 80%\">
@@ -231,8 +228,7 @@ class Database():
                   </tr>
                   """
         
-        
-
+    
         # Make sure these are sorted
         molecule_names = self.conn.execute("SELECT MOLECULE_ID FROM Molecules").fetchall()
         molecule_ids = self.conn.execute("SELECT NAME FROM Molecules").fetchall()
@@ -244,11 +240,13 @@ class Database():
                 atom_list = self.conn.execute("SELECT ATOM_ID FROM MoleculeAtom WHERE MOLECULE_ID='" + str(molecule_ids[i]) + "'").fetchall()
                 bond_list = self.conn.execute("SELECT BOND_ID FROM MoleculeBond WHERE MOLECULE_ID='" + str(molecule_ids[i]) + "'").fetchall()
 
-                ret_string += format % (molecule_names[i], len(atom_list), len(bond_list))
+               ret_string += format % (molecule_names[i], len(atom_list), len(bond_list))
 
         ret_string += "</table>"
 
         return ret_string; 
+
+
 
     def molecule_exists(self, mol_name):
         found = self.conn.execute("SELECT NAME FROM Molecules WHERE NAME='" + mol_name +"'").fetchall()

@@ -6,11 +6,6 @@ import urllib
 import MolDisplay
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-# Anthony Colaiacovo
-# 1091370
-# April 5th 2023
-# CIS 2750 A4
-
 
 db = molsql.Database(reset=True)
 db.create_tables()
@@ -160,11 +155,6 @@ class sub_BaseHTTP(BaseHTTPRequestHandler):
             self.wfile.write(bytes("404: not found", "utf-8"))
 
         return 
-
-
-# def counts_match():
-#     print("test")
-#     return
 
 
 httpd = HTTPServer(('localhost', int(sys.argv[1])), sub_BaseHTTP)
