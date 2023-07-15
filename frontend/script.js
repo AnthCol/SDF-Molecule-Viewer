@@ -8,7 +8,7 @@ $("#sdf_form").on("submit",
 
         const form_data = 
         { 
-            sdf_file: $("#sdf_file_input")[0].files[0] }; 
+            sdf_file: $("#sdf_file_input")[0].files[0], 
             molecule_name: $("#sdf_molecule_name").val()
         };
         $.ajax(
