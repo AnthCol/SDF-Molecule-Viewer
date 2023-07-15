@@ -4,3 +4,4 @@
 /*.so
 /molecule.i
 /molecule_wrap.c
+/molecule_wrap.py
