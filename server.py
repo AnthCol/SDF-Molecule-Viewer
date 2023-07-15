@@ -43,6 +43,16 @@ class http_server(BaseHTTPRequestHandler):
             page = fptr.read()
             fptr.close()
             self.display(page)
+        elif (self.path == "/style.css"):
+            fptr = open("frontend/style.css")
+            page = fptr.read()
+            fptr.close()
+            self.display(page)
+        elif (self.path == "/script.js"):
+            fptr = open("frontend/script.js")
+            page = fptr.read()
+            fptr.close()
+            self.display(page)
         else:
             self.error()
         
@@ -77,7 +87,7 @@ class http_server(BaseHTTPRequestHandler):
             # At this point the molecule has been added to the database
             # Now just need to display a webpage as a response. 
 
-            fptr = open("frontend/sdf_upload.html", "r")
+            fptr = open("html_files/sdf_upload.html", "r")
             page = fptr.read()
             fptr.close()
             self.display(page)
