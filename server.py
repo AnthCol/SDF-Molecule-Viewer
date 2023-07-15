@@ -2,8 +2,8 @@ import io
 import sys
 import json
 import molsql
-import urllib
 import MolDisplay
+from urllib.parse import parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 db = molsql.Database(reset=True)
@@ -67,16 +67,16 @@ class http_server(BaseHTTPRequestHandler):
         
         if (self.path == "/sdf-form" or self.path == "/"):
             content_length = int(self.headers["Content-Length"])
-            post_data      = self.rfile.read(content_length)
+           
+            post_data = self.rfile.read(content_length)
+            post_data = parse_qs(post_data.decode("utf-8"))
             
-            print("#################################")
+            print("printing post_data")
             print(post_data)
-            print("##################################")
 
-            data           = json.loads(post_data.decode("utf-8"))
+            sdf_name = post_data["molecule_name"][0]
+            sdf_file = post_data["sdf_file"][0]
 
-            print("printing with do_POST")
-            print(data)
 
             # Only add the molecule to the database if it isn't in there 
             #if (not db.molecule_exists(name)):
@@ -84,9 +84,6 @@ class http_server(BaseHTTPRequestHandler):
             
 
             
-            # At this point the molecule has been added to the database
-            # Now just need to display a webpage as a response. 
-
             fptr = open("html_files/sdf_upload.html", "r")
             page = fptr.read()
             fptr.close()
