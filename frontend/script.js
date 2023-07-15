@@ -5,7 +5,7 @@ $("#sdf_form").on("submit",
         event.preventDefault(); 
         const form_data = new FormData(this); 
 
-        form_data.append("file", $("#sdf_file_input")[0].files[0]);
+        form_data.append("sdf_file", $("#sdf_file_input")[0].files[0]);
         $.ajax(
             {
                 url: "/sdf-form", 
@@ -18,5 +18,7 @@ $("#sdf_form").on("submit",
 
     }
 ); 
+
+
 
 

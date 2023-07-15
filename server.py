@@ -1,5 +1,6 @@
 import io
 import sys
+import cgi
 import molsql
 import urllib
 import MolDisplay
@@ -10,54 +11,67 @@ db.create_tables()
 
 
 class http_server(BaseHTTPRequestHandler):
+    
+    def display(self, page):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.send_header("Content-length", len(page))
+        self.end_headers()
+        self.wfile.write(bytes(page, "utf-8"))
+    
+    def error(self):
+        self.send_response(404)
+        self.end_headers()
+        self.wfile.write(bytes("404: not found", "utf-8"))
+
+
+
 
     def do_GET(self):
         if (self.path == "/"):
-            fptr = open("sdf_upload.html")
+            self.path = "/sdf-form"
+            fptr = open("frontend/sdf_upload.html")
             page = fptr.read()
-
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.send_header("Content-length", len(page))
-            self.end_headers()
-
-            # Display the web form in the browser 
-            self.wfile.write(bytes(page, "utf-8"))
+            fptr.close()
+            self.display(page)
         else:
-            self.send_response(404)
-            self.end_headers()
-            self.wfile.write(bytes("404: not found", "utf-8"))
+            self.error()
+        
         return 
 
 
     def do_POST(self):
 
         if (self.path == "/sdf-form"):
-            print("INSIDE POST")
-
+        
             form_data = cgi.FieldStorage(
                 fp      = self.rfile, 
                 headers = self.headers, 
                 environ = {"REQUEST_METHOD" : "POST"}
             )
             
-            name = form_data.getvalue("filename")
-            file = form_data["file"]
+            name = form_data["sdf_molecule_name"]
+            file = form_data["sdf_file"].read()
         
-            sdf = io.TextIOWrapper(uploaded_file.file, encoding = "utf-8")
+            sdf = io.TextIOWrapper(file)
             
-            db.add_molecule(name, sdf)
 
-            print("printing name: " + name)
-            print("printing contents of file: " + str(std.read()))
+            # Only add the molecule to the database if it isn't in there 
+            if (not db.molecule_exists(name)):
+                db.add_molecule(name, sdf)
+            
 
             
-            self.send_response(200)
-            self.end_headers()
+            # At this point the molecule has been added to the database
+            # Now just need to display a webpage as a response. 
+
+            fptr = open("frontend/sdf_upload.html", "r")
+            page = fptr.read()
+            fptr.close()
+            self.display(page)
+
         else:
-            self.send_response(404)
-            self.end_headers()
-            self.wfile.write(bytes("404: not found", "utf-8"))
+            self.error()
 
         return 
 
