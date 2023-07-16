@@ -11,9 +11,36 @@ db = molsql.Database(reset=True)
 db.create_tables()
 
 
+GET_list  = []
+POST_list = []
+prefix    = "frontend/"
+CSS_FILE  = "style.css"
+JS_FILE   = "script.js"
+
+GET_list.append("add_remove.html")
+GET_list.append("sdf_upload.html")
+GET_list.append("select_display.html")
+GET_list.append("successful_upload.html")
+GET_list.append("unsuccessful_upload.html")
+GET_list.append("style.css")
+GET_list.append("script.js")
+
+
+POST_list.append("/")
+POST_list.append("/sdf-form")
+
+
 class http_server(BaseHTTPRequestHandler):
     
-    def display(self, page):
+    def create_page(self, filename):
+        filename = prefix + filename
+        fptr = open(filename)
+        page = fptr.read()
+        fptr.close()
+        return page; 
+
+    def display(self, filename):
+        page = self.create_page(filename)
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.send_header("Content-length", len(page))
@@ -24,52 +51,17 @@ class http_server(BaseHTTPRequestHandler):
         self.send_response(404)
         self.end_headers()
         self.wfile.write(bytes("404: not found", "utf-8"))
-
-
-
-    # GET requests should only retrieve data
-    # In our case, this should occur when we need to retrieve a molecule
-    # from the database, and display it on the screen. 
-    # We will create a custom svg screen with a back-button. 
  
     def do_GET(self):
-        content_length = self.headers.get("Content-Length")
-        #body           = self.rfile.read(content_length)
-        #get_variables  = urllib.parse.parse_qs(body.decode("utf-8"))
-        
-        #if (self.path not in do_GET_list):
-        #    self.error()
-        #else:
-        #    fptr = open("self.path")
-        #    page = fptr.read()
-        #    fptr.close()
-        #    self.display(page)
-       
-        if (self.path == "/"):
-            self.path = "/sdf-form"
-            fptr = open("frontend/sdf_upload.html")
-            page = fptr.read()
-            fptr.close()
-            self.display(page)
-        elif (self.path == "/style.css"):
-            fptr = open("frontend/style.css")
-            page = fptr.read()
-            fptr.close()
-            self.display(page)
-        elif (self.path == "/script.js"):
-            fptr = open("frontend/script.js")
-            page = fptr.read()
-            fptr.close()
-            self.display(page)
+        if (self.path in GET_list):
+            self.display(self.path)
+        elif (self.path == "/"):
+            self.display("sdf_upload.html")
         else:
             self.error()
         
         return 
 
-    # POST requests should only deal with things that cause a change in state, 
-    # or side effects on the server. In this case, it would be 
-    # add/remove an element to/from the database, as well as 
-    # adding a molecule through the file upload
 
     def do_POST(self):
         
