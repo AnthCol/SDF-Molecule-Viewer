@@ -53,10 +53,10 @@ class http_server(BaseHTTPRequestHandler):
         self.wfile.write(bytes("404: not found", "utf-8"))
  
     def do_GET(self):
-        if (self.path in GET_list):
-            self.display(self.path)
-        elif (self.path == "/"):
+        if (self.path == "/"):
             self.display("sdf_upload.html")
+        elif (self.path in GET_list):
+            self.display(self.path)
         else:
             self.error()
         
