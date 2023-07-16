@@ -4,6 +4,8 @@ import json
 import molsql
 import MolDisplay
 from urllib.parse import parse_qs
+from email.policy import default
+from email.parser import BytesParser
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 db = molsql.Database(reset=True)
@@ -36,7 +38,14 @@ class http_server(BaseHTTPRequestHandler):
         #body           = self.rfile.read(content_length)
         #get_variables  = urllib.parse.parse_qs(body.decode("utf-8"))
         
-
+        #if (self.path not in do_GET_list):
+        #    self.error()
+        #else:
+        #    fptr = open("self.path")
+        #    page = fptr.read()
+        #    fptr.close()
+        #    self.display(page)
+       
         if (self.path == "/"):
             self.path = "/sdf-form"
             fptr = open("frontend/sdf_upload.html")
@@ -67,16 +76,23 @@ class http_server(BaseHTTPRequestHandler):
         
         if (self.path == "/sdf-form" or self.path == "/"):
             content_length = int(self.headers["Content-Length"])
-           
+            print("PRINTING CONTENT TYPE")
+            print(self.headers["Content-Type"])
             post_data = self.rfile.read(content_length)
-            post_data = parse_qs(post_data.decode("utf-8"))
+            post_data = BytesParser(policy=default).parsebytes(post_data)
             
-            print("printing post_data")
+
+            print("printing post data after bytes parser")
+
+
             print(post_data)
 
-            sdf_name = post_data["molecule_name"][0]
-            sdf_file = post_data["sdf_file"][0]
 
+            sdf_file = post_data.get_payload(0).get_payload(decode=True)
+            sdf_name = post_data.get_payload(1).get_payload(decode=True).decode()
+            print("printing post_data")
+            print("printing name: ")
+            print(sdf_name)
 
             # Only add the molecule to the database if it isn't in there 
             #if (not db.molecule_exists(name)):
