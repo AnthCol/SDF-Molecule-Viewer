@@ -227,17 +227,20 @@ void molappend_bond(molecule *molecule, bond *bond)
 
     if (molecule == NULL || bond == NULL) return; 
 
-    if (molecule->bond_no == molecule->bond_max){                                                                         
+    if (molecule->bond_no == molecule->bond_max)
+    {                           
         molecule->bond_max = (molecule->bond_max < 1) ? 1 : molecule->bond_max * 2; 
 
         (*molecule).bonds = realloc(molecule->bonds, molecule->bond_max * sizeof(struct bond)); 
-        if (molecule->bonds == NULL){
+        if (molecule->bonds == NULL)
+        {
             printf("##### Realloc for bonds returned NULL #####\n"); 
             exit(1); 
         }
 
         molecule->bond_ptrs = realloc(molecule->bond_ptrs, molecule->bond_max * sizeof(struct bond*)); 
-        if (molecule->bond_ptrs == NULL){
+        if (molecule->bond_ptrs == NULL)
+        {
             printf("##### Realloc for bond_ptrs returned NULL #####\n"); 
             exit(1); 
         }
