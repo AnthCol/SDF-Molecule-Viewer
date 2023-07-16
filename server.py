@@ -4,8 +4,7 @@ import json
 import molsql
 import MolDisplay
 from urllib.parse import parse_qs
-from email.policy import default
-from email.parser import BytesParser
+from multipart import MultipartParser
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 db = molsql.Database(reset=True)
@@ -75,32 +74,24 @@ class http_server(BaseHTTPRequestHandler):
     def do_POST(self):
         
         if (self.path == "/sdf-form" or self.path == "/"):
-            content_length = int(self.headers["Content-Length"])
-            print("PRINTING CONTENT TYPE")
-            print(self.headers["Content-Type"])
-            post_data = self.rfile.read(content_length)
-            post_data = BytesParser(policy=default).parsebytes(post_data)
+            
+            content_type = self.headers["Content-Type"]
+
+            post_data = self.rfile.read(int(self.headers["Content-Length"]))
+            post_data = MultipartParser(io.BytesIO(post_data), content_type.split("boundary=")[1])
             
 
-            print("printing post data after bytes parser")
+            for data in post_data:
+                if (data.name == "sdf_file"):
+                    file = io.BytesIO(data.file.read())
+                elif (data.name == "molecule_name"):
+                    name = data.value
 
-
-            print(post_data)
-
-
-            sdf_file = post_data.get_payload(0).get_payload(decode=True)
-            sdf_name = post_data.get_payload(1).get_payload(decode=True).decode()
-            print("printing post_data")
-            print("printing name: ")
-            print(sdf_name)
-
-            # Only add the molecule to the database if it isn't in there 
-            #if (not db.molecule_exists(name)):
-            #    db.add_molecule(name, sdf_file)
-            
+            if (not db.molecule_exists(name)):
+                db.add_molecule(name, io.TextIOWrapper(file))
 
             
-            fptr = open("html_files/sdf_upload.html", "r")
+            fptr = open("frontend/sdf_upload.html", "r")
             page = fptr.read()
             fptr.close()
             self.display(page)

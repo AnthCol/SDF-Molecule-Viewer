@@ -9,13 +9,13 @@ $(document).ready(
                 form_data.append("sdf_file", $("#sdf_file_input")[0].files[0]); 
                 form_data.append("molecule_name", $("#sdf_molecule_name").val())
                 $.ajax(
-                {
-                    url: "/sdf-form", 
-                    type: "POST",
-                    data: form_data, 
-                    processData: false,
-                    contentType: false
-                }
+                    {
+                        url: "/sdf-form", 
+                        type: "POST",
+                        data: form_data, 
+                        processData: false,
+                        contentType: false
+                    }
                 );
 
             }
