@@ -13,17 +13,17 @@ db.create_tables()
 
 GET_list  = []
 POST_list = []
-prefix    = "frontend/"
+prefix    = "frontend"
 CSS_FILE  = "style.css"
 JS_FILE   = "script.js"
 
-GET_list.append("add_remove.html")
-GET_list.append("sdf_upload.html")
-GET_list.append("select_display.html")
-GET_list.append("successful_upload.html")
-GET_list.append("unsuccessful_upload.html")
-GET_list.append("style.css")
-GET_list.append("script.js")
+GET_list.append("/add_remove.html")
+GET_list.append("/sdf_upload.html")
+GET_list.append("/select_display.html")
+GET_list.append("/successful_upload.html")
+GET_list.append("/unsuccessful_upload.html")
+GET_list.append("/style.css")
+GET_list.append("/script.js")
 
 
 POST_list.append("/")
@@ -39,8 +39,7 @@ class http_server(BaseHTTPRequestHandler):
         fptr.close()
         return page; 
 
-    def display(self, filename):
-        page = self.create_page(filename)
+    def display(self, page):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.send_header("Content-length", len(page))
@@ -51,12 +50,15 @@ class http_server(BaseHTTPRequestHandler):
         self.send_response(404)
         self.end_headers()
         self.wfile.write(bytes("404: not found", "utf-8"))
- 
+
+    
     def do_GET(self):
-        if (self.path == "/"):
-            self.display("sdf_upload.html")
-        elif (self.path in GET_list):
-            self.display(self.path)
+        if (self.path in GET_list):
+            page = self.create_page(self.path) 
+            self.display(page)
+        elif (self.path == "/"):
+            page = self.create_page("/sdf_upload.html")
+            self.display(page)
         else:
             self.error()
         
@@ -83,7 +85,7 @@ class http_server(BaseHTTPRequestHandler):
                 db.add_molecule(name, io.TextIOWrapper(file))
 
             
-            fptr = open("frontend/sdf_upload.html", "r")
+            fptr = open(prefix + "/sdf_upload.html", "r")
             page = fptr.read()
             fptr.close()
             self.display(page)
