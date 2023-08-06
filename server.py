@@ -50,8 +50,14 @@ class http_server(BaseHTTPRequestHandler):
         self.send_response(404)
         self.end_headers()
         self.wfile.write(bytes("404: not found", "utf-8"))
-
     
+    
+    def post_retrieve_parse(self):
+        data = self.rfile.read(int(self.headers["Content-Length"]))
+        data = MultipartParser(io.BytesIO(data), self.headers["Content-Type"].split("boundary=")[1])
+        return data
+    
+    # Get method isto request data from a specified resource.  
     def do_GET(self):
         if (self.path in GET_list):
             page = self.create_page(self.path) 
@@ -64,16 +70,12 @@ class http_server(BaseHTTPRequestHandler):
         
         return 
 
-
+    # Post method is to send data to a server the create/update a resource. 
     def do_POST(self):
         
         if (self.path == "/sdf-form" or self.path == "/"):
             
-            content_type = self.headers["Content-Type"]
-
-            post_data = self.rfile.read(int(self.headers["Content-Length"]))
-            post_data = MultipartParser(io.BytesIO(post_data), content_type.split("boundary=")[1])
-            
+            post_data = post_retrieve_parse()
 
             for data in post_data:
                 if (data.name == "sdf_file"):
@@ -89,7 +91,14 @@ class http_server(BaseHTTPRequestHandler):
             page = fptr.read()
             fptr.close()
             self.display(page)
-
+        elif (self.path == "/add-delete"): 
+            post_data = post_retrieve_parse()
+            
+            if (is_add()):
+                print("add")
+            else:
+                print("delete")
+            
         else:
             self.error()
 

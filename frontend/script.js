@@ -13,8 +13,6 @@ $(document).ready(
                         url: "/sdf-form", 
                         type: "POST",
                         data: form_data, 
-                        processData: false,
-                        contentType: false
                     }
                 );
             }
