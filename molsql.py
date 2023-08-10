@@ -192,11 +192,12 @@ class Database():
 
     def radial_gradients(self):
         radialGradientSVG = """
-        <radialGradient id="%s" cx="-50%%" cy="-50%%" r="220%%" fx="20%%" fy="20%%">
-          <stop offset="0%%" stop-color="#%s"/>
-          <stop offset="50%%" stop-color="#%s"/>
-          <stop offset="100%%" stop-color="#%s"/>
-        </radialGradient>"""
+                            <radialGradient id="%s" cx="-50%%" cy="-50%%" r="220%%" fx="20%%" fy="20%%">
+                                <stop offset="0%%" stop-color="#%s"/>
+                                <stop offset="50%%" stop-color="#%s"/>
+                                <stop offset="100%%" stop-color="#%s"/>
+                            </radialGradient>
+                            """
 
         ret_string = ""
         data_list = self.conn.execute("SELECT ELEMENT_NAME, COLOUR1, COLOUR2, COLOUR3 FROM Elements").fetchall()
@@ -229,7 +230,6 @@ class Database():
                   """
         
     
-        # Make sure these are sorted
         molecule_names = self.conn.execute("SELECT MOLECULE_ID FROM Molecules").fetchall()
         molecule_ids = self.conn.execute("SELECT NAME FROM Molecules").fetchall()
         atom_list = []
@@ -250,3 +250,5 @@ class Database():
     def molecule_exists(self, mol_name):
         found = self.conn.execute("SELECT NAME FROM Molecules WHERE NAME='" + mol_name +"'").fetchall()
         return (len(found) != 0)
+
+

@@ -21,12 +21,12 @@
     <br/>
     <form id = "add_form" enctype="multipart/form-data" method = "post">
       <p>
-        Element Code: <input id = "ele_code" type="text" name = "ele_code"></input><br/>
-        Element Name: <input id = "ele_name" type="text" name = "ele_name"></input><br/>
-        Colours (0-255): R = <input id = "ele_r" type="number" name = "ele_r" min="0" max="255"> 
-                         G = <input id = "ele_g" type="number" name = "ele_g" min="0" max="255">
-                         B = <input id = "ele_b" type="number" name = "ele_b" min="0" max="255"><br/>
-        Radius: <input id = "ele_rad" type="number" name = "ele_rad" step="0.01" min="0.01" max = "1000"> <br/>
+        Element Code: <input id = "add_code" type="text" name = "add_code"></input><br/>
+        Element Name: <input id = "add_name" type="text" name = "add_name"></input><br/>
+        Colours (0-255): R = <input id = "add_r" type="number" name = "add_r" min="0" max="255"> 
+                         G = <input id = "add_g" type="number" name = "add_g" min="0" max="255">
+                         B = <input id = "add_b" type="number" name = "add_b" min="0" max="255"><br/>
+        Radius: <input id = "add_rad" type="number" name = "add_rad" step="0.5" min="0.01" max = "1000"> <br/>
       </p>
       <button id = "add_button">Add Element</button>
     </form>
@@ -42,12 +42,12 @@
 
     <form id = "delete_form" enctype="multipart/form-data" method = "post" >
         <p>
-            Element Code: <input id = "rm_code" type="text" name = "rm_code"></input><br/>
-            Element Name: <input id = "rm_name" type="text" name = "rm_name"></input><br/>
-            Colours (0-255): R = <input id = "rm_r" type="number" name = "rm_r" min="0" max="255"> 
-                         G = <input id = "rm_g" type="number" name = "rm_g" min="0" max="255">
-                         B = <input id = "rm_b" type="number" name = "rm_b" min="0" max="255"><br/>
-            Radius: <input id = "rm_rad" type="number" name = "rm_rad" step="0.5" min="0.01" max = "1000"> <br/>
+            Element Code: <input id = "del_code" type="text" name = "del_code"></input><br/>
+            Element Name: <input id = "del_name" type="text" name = "del_name"></input><br/>
+            Colours (0-255): R = <input id = "del_r" type="number" name = "del_r" min="0" max="255"> 
+                         G = <input id = "del_g" type="number" name = "del_g" min="0" max="255">
+                         B = <input id = "del_b" type="number" name = "del_b" min="0" max="255"><br/>
+            Radius: <input id = "del_rad" type="number" name = "del_rad" step="0.5" min="0.01" max = "1000"> <br/>
         </p>
         <button id = "delete_button">Delete Element</button>
     </form>

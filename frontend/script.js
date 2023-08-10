@@ -8,29 +8,29 @@ $(document).ready(
                 var form_data = new FormData(); 
                 form_data.append("sdf_file", $("#sdf_file_input")[0].files[0]); 
                 form_data.append("molecule_name", $("#sdf_molecule_name").val());
+                
                 $.ajax(
                     {
                         url: "/sdf-form", 
                         type: "POST",
                         data: form_data, 
+                        processData: false, 
+                        contentType: false
                     }
                 );
             }
-        );
-    },
-
-    function(){
+        ), 
         $("#add_form").on("submit", 
             function(event)
             {
                 event.preventDefault(); 
                 var form_data = new FormData(); 
-                form_data.append("code", $("#ele_code").val()); 
-                form_data.append("name", $("#ele_name").val()); 
-                form_data.append("red",  $("#ele_r").val()); 
-                form_data.append("green",$("#ele_g").val()); 
-                form_data.append("blue", $("#ele_b").val()); 
-                form_data.append("rad",  $("#ele_rad").val()); 
+                form_data.append("code", $("#add_code").val()); 
+                form_data.append("name", $("#add_name").val()); 
+                form_data.append("red",  $("#add_r").val()); 
+                form_data.append("green",$("#add_g").val()); 
+                form_data.append("blue", $("#add_b").val()); 
+                form_data.append("rad",  $("#add_rad").val()); 
                 
                 $.ajax(
                     {
@@ -42,25 +42,22 @@ $(document).ready(
                     }
                 );
             }
-        );
-    }, 
-
-    function(){
+        ), 
         $("#delete_form").on("submit", 
             function(event)
             {
                 event.preventDefault(); 
                 var form_data = new FormData(); 
-                form_data.append("code", $("#rm_code").val()); 
-                form_data.append("name", $("#rm_name").val()); 
-                form_data.append("red",  $("#rm_r").val()); 
-                form_data.append("green",$("#rm_g").val()); 
-                form_data.append("blue", $("#rm_b").val()); 
-                form_data.append("rad",  $("#rm_rad").val()); 
+                form_data.append("code", $("#del_code").val()); 
+                form_data.append("name", $("#del_name").val()); 
+                form_data.append("red",  $("#del_r").val()); 
+                form_data.append("green",$("#del_g").val()); 
+                form_data.append("blue", $("#del_b").val()); 
+                form_data.append("rad",  $("#del_rad").val()); 
                 
                 $.ajax(
                     {
-                        url: "/add-form", 
+                        url: "/delete-form", 
                         type: "POST",
                         data: form_data, 
                         processData: false, 
@@ -69,7 +66,7 @@ $(document).ready(
                 );
             }
         );
-    } 
+    }  
 ); 
 
 
