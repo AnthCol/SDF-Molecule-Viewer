@@ -10,6 +10,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 db = molsql.Database(reset=True)
 db.create_tables()
 
+element_attributes = 6
 
 GET_list  = []
 POST_list = []
@@ -59,6 +60,12 @@ class http_server(BaseHTTPRequestHandler):
         data = MultipartParser(io.BytesIO(data), self.headers["Content-Type"].split("boundary=")[1])
         return data
     
+    def generate_page(self, filename):
+        fptr = open(prefix + filename, "r")
+        page = fptr.read()
+        fptr.close()
+        return page
+
     # Get method isto request data from a specified resource.  
     def do_GET(self):
         if (self.path in GET_list):
@@ -98,16 +105,31 @@ class http_server(BaseHTTPRequestHandler):
             if (not db.molecule_exists(name)):
                 db.add_molecule(name, io.TextIOWrapper(file))
             
-            fptr = open(prefix + "/sdf_upload.html", "r")
-            page = fptr.read()
-            fptr.close()
-            self.display(page)
+            self.display(self.generate_page("/sdf_upload.html")
         elif (self.path == "/add-form"): 
-            print(post_data)
-            print("in add form")
+            
+            data_list = [] 
+            for data in post_data:
+                data_list.append(data)
+            
+            if (len(data_list) != element_attributes):
+                print("BAD\n")
+
+            db.add_element(data_list)
+            
+            self.display(self.generate_page("/add_remove.html")
         elif (self.path == "/delete-form"):
-            print(post_data)
-            print("in delete form")
+            
+            data_list = [] 
+            for data in post_data:
+                data_list.append(data)
+
+            if (len(data_list) != element_attributes):
+                print("BAD\n")
+            
+            db.del_element(data_list)
+
+            self.display(self.generate_page("/add_remove.html")
         else:
             self.error()
 
