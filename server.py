@@ -21,21 +21,18 @@ JS_FILE   = "script.js"
 GET_list.append("/add_remove.html")
 GET_list.append("/sdf_upload.html")
 GET_list.append("/select_display.html")
-GET_list.append("/successful_upload.html")
-GET_list.append("/unsuccessful_upload.html")
 GET_list.append("/style.css")
 GET_list.append("/script.js")
 
-
-POST_list.append("/")
-POST_list.append("/sdf-form")
-
+fptr = open(prefix + "/select_display.html")
+display_header = fptr.read()
+fptr.close()
+display_footer = "</body></html>"
 
 class http_server(BaseHTTPRequestHandler):
     
     def create_page(self, filename):
-        filename = prefix + filename
-        fptr = open(filename)
+        fptr = open(prefix + filename, "r")
         page = fptr.read()
         fptr.close()
         return page; 
@@ -59,16 +56,16 @@ class http_server(BaseHTTPRequestHandler):
         data = self.rfile.read(int(self.headers["Content-Length"]))
         data = MultipartParser(io.BytesIO(data), self.headers["Content-Type"].split("boundary=")[1])
         return data
-    
-    def generate_page(self, filename):
-        fptr = open(prefix + filename, "r")
-        page = fptr.read()
-        fptr.close()
-        return page
 
     # Get method isto request data from a specified resource.  
     def do_GET(self):
-        if (self.path in GET_list):
+        if (self.path == "/select_display.html"):
+            page = display_header
+            page += db.fetch_all_molecules()
+            page += display_footer
+            print("PRINTING PAGE TO TERMINAL:\n" + page)
+            self.display(page)
+        elif (self.path in GET_list):
             page = self.create_page(self.path) 
             self.display(page)
         elif (self.path == "/"):
@@ -104,8 +101,8 @@ class http_server(BaseHTTPRequestHandler):
 
             if (not db.molecule_exists(name)):
                 db.add_molecule(name, io.TextIOWrapper(file))
-            
-            self.display(self.generate_page("/sdf_upload.html")
+                 
+            self.display(self.create_page("/sdf_upload.html"))
         elif (self.path == "/add-form"): 
             
             data_list = [] 
@@ -117,7 +114,7 @@ class http_server(BaseHTTPRequestHandler):
 
             db.add_element(data_list)
             
-            self.display(self.generate_page("/add_remove.html")
+            self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/delete-form"):
             
             data_list = [] 
@@ -129,7 +126,9 @@ class http_server(BaseHTTPRequestHandler):
             
             db.del_element(data_list)
 
-            self.display(self.generate_page("/add_remove.html")
+            self.display(self.create_page("/add_remove.html"))
+        elif (self.path == "/sdf-display"):
+            self.display(display_header.join(db.fetch_all_molecules()).join(display_footer))
         else:
             self.error()
 

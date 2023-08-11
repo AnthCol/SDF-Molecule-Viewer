@@ -249,8 +249,8 @@ class Database():
                   """
         
     
-        molecule_names = self.conn.execute("SELECT MOLECULE_ID FROM Molecules").fetchall()
-        molecule_ids = self.conn.execute("SELECT NAME FROM Molecules").fetchall()
+        molecule_ids = self.conn.execute("SELECT MOLECULE_ID FROM Molecules").fetchall()
+        molecule_names = self.conn.execute("SELECT NAME FROM Molecules").fetchall()
         atom_list = []
         bond_list = []
         
@@ -261,7 +261,6 @@ class Database():
                 ret_string += format % (molecule_names[i], len(atom_list), len(bond_list))
 
         ret_string += "</table>"
-
         return ret_string; 
 
 

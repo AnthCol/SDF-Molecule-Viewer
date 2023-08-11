@@ -65,7 +65,22 @@ $(document).ready(
                     }
                 );
             }
-        );
+        ), 
+        $("#display_button").on("click", 
+            function(event)
+            {
+                event.preventDefault(); 
+                $.ajax(
+                    {
+                        url: "/svg-display", 
+                        type: "POST"
+                        data: // FIXME unfinished  
+                        processData: false, 
+                        contentType: false
+                    }
+                );
+            }
+        ); 
     }  
 ); 
 

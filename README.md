@@ -12,7 +12,7 @@ Step 1:
     - multipart package (pip install multipart)
 
 Step 2:
-    Run the "make" command in the terminal
+    Run the "make" command in the terminal (you may need to update the python paths in the makefile)
 
 Step 3:
     Run the following export command in the terminal:
