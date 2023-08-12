@@ -1,14 +1,13 @@
 import io
 import sys
 import molsql
+import urllib
 import MolDisplay
 from multipart import MultipartParser
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 db = molsql.Database(reset=True)
 db.create_tables()
-
-element_attributes = 6
 
 GET_list  = []
 POST_list = []
@@ -81,19 +80,21 @@ class http_server(BaseHTTPRequestHandler):
 
             for data in post_data:
                 if (data.name == "sdf_file"):
-                    file = io.BytesIO(data.file.read())
+                    file = io.TextIOWrapper(io.BytesIO(data.file.read()))
                 elif (data.name == "molecule_name"):
                     name = data.value
                     if (not db.molecule_exists(name)):
-                        db.add_molecule(name, io.TextIOWrapper(file))
+                        db.add_molecule(name, file)
                 
             self.display(self.create_page("/sdf_upload.html"))
         elif (self.path == "/add-form"): 
             
-            post_data = self.rfile.read(int(self.headers["Content-Length"]))
-            print("PRINTING POST DATA----------------------------------------------------->>>>>>>>>>>") 
-            print(post_data)
+            post_data = self.rfile.read(int(self.headers["Content-Length"])).decode("utf-8")
+            post_data = urllib.parse.parse_qs(post_data)
 
+            for key, value in post_data.iteritems():
+                print ("%s = %s" % (key, value))
+            print("DONE ITERATING OVER IT\n"); 
             data_list = [] 
             for data in post_data:
                 data_list.append(data)
@@ -102,10 +103,15 @@ class http_server(BaseHTTPRequestHandler):
             
             self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/delete-form"): 
-            post_data = self.rfile.read(int(self.headers["Content-Length"]))
-            print("PRINTING POST DATA---------------------------------------------------->>>>>>>>>>>>>>>>>>")
-            print(post_data)
+            
+            post_data = self.rfile.read(int(self.headers["Content-Length"])).decode("utf-8")
+            post_data = urllib.parse.parse_qs(post_data)
+        
+            print(str(post_data))
 
+            print("DONE PRINTING POST_DATA")
+
+           
             data_list = []
             db.del_element(data_list)
             self.display(self.create_page("/add_remove.html"))
