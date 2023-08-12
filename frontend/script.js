@@ -9,19 +9,22 @@ $(document).ready(
             function(event)
             {
                 event.preventDefault(); 
-                var form_data = new FormData(); 
+                var form_data = new FormData();
                 
-                //if (is_empty($("#sdf_file_input")[0].files[0]) || is_empty($("#sdf_molecule_name").val())){
+                var file = $("#sdf_file_input")[0].files[0]; 
+                var name = $("#sdf_molecule_name").val(); 
+ 
+                if (is_empty(file) || is_empty(name)){
                     /*
                      * FIXME
                      * Need to make the missing thing flash red here or something 
                      */
-                 //   console.log("EMPTY PATH TAKEN\n")
-                  //  return; 
-               // }
+                    console.log("EMPTY PATH TAKEN\n")
+                    return; 
+                }
 
-                form_data.append("sdf_file", $("#sdf_file_input")[0].files[0]); 
-                form_data.append("molecule_name", $("#sdf_molecule_name").val());
+                form_data.append("sdf_file", file); 
+                form_data.append("molecule_name", name); 
                 
                 $.ajax(
                     {

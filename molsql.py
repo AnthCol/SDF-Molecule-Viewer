@@ -232,9 +232,10 @@ class Database():
                     <br>
                     <table style = \"width: 80%\">
                     <tr>
-                        <th> Molecule Name <th>
-                        <th> Atom Count <th>
-                        <th> Bond Count <th>
+                        <th> Molecule Name </th>
+                        <th> Atom Count </th>
+                        <th> Bond Count </th>
+                        <th> Select </th>
                     </tr>
 
                     """
@@ -244,6 +245,7 @@ class Database():
                     <td>%s</td>
                     <td>%d</td>
                     <td>%d</td>
+                    <td><button> Select </button></td>
                   </tr>
                   """
         
