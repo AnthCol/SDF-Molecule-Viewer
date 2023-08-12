@@ -54,6 +54,14 @@ class http_server(BaseHTTPRequestHandler):
         data = self.rfile.read(int(self.headers["Content-Length"]))
         data = MultipartParser(io.BytesIO(data), self.headers["Content-Type"].split("boundary=")[1])
         return data
+    
+    def generate_list(self, raw_data):
+        data_list = []
+
+        for data in raw_data:
+            data_list.append(data.value)
+
+        return data_list
 
     # Get method isto request data from a specified resource.  
     def do_GET(self):
@@ -89,35 +97,11 @@ class http_server(BaseHTTPRequestHandler):
                 
             self.display(self.create_page("/sdf_upload.html"))
         elif (self.path == "/add-form"): 
-            
-            post_data = self.rfile.read(int(self.headers["Content-Length"])).decode("utf-8")
-            post_data = urllib.parse.parse_qs(post_data)
-
-            for key, value in post_data.iteritems():
-                print ("%s = %s" % (key, value))
-            
-            data_list = [] 
-            for data in post_data:
-                data_list.append(data)
-            
+            data_list = self.generate_list(self.parse_multipart()) 
             db.add_element(data_list)
-            
             self.display(self.create_page("/add_remove.html"))
-        elif (self.path == "/delete-form"): 
-            
-
-
-            post_data = cgi.FieldStorage(
-                fp = self.rfile, 
-                headers = self.headers, 
-                environ = {"REQUEST_METHOD" : "POST" }
-            )
-            
-            
-            print("DONE PRINTING\n")
-
-
-            data_list = []
+        elif (self.path == "/delete-form"):  
+            data_list = self.generate_list(self.parse_multipart())
             db.del_element(data_list)
             self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/sdf-display"):

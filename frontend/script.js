@@ -58,7 +58,8 @@ $(document).ready(
 
                 var err_colour = "lightcoral";
                 var bad_flag = 0; 
-
+                
+                var form_data = new FormData(); 
                 const map = new Map(); 
                 map.set("#add_code", $("#add_code").val()); 
                 map.set("#add_name", $("#add_name").val()); 
@@ -69,6 +70,9 @@ $(document).ready(
 
                 for (const [key, value] of map)
                 {
+
+                    form_data.append(value)
+
                     if (is_empty(value))
                     {
                         $(key).css("background-color", err_colour); 
@@ -87,14 +91,7 @@ $(document).ready(
                         {
                             url: "/add-form", 
                             type: "POST",
-                            data: {
-                                code:  map.get("#add_code"), 
-                                name:  map.get("#add_name"),  
-                                red:   map.get("#add_r"),
-                                green: map.get("#add_g"), 
-                                blue:  map.get("#add_b"), 
-                                rad:   map.get("#add_rad")
-                            },
+                            data: form_data,
                             processData: false, 
                             contentType: false
                         }
@@ -108,8 +105,9 @@ $(document).ready(
                 event.preventDefault(); 
                 
                 err_colour = "lightcoral"; 
-                empty_count = 0; 
-
+                bad_flag = 0; 
+                
+                var form_data = new FormData(); 
                 const map = new Map(); 
                 map.set("#del_code", $("#del_code").val()); 
                 map.set("#del_name", $("#del_name").val()); 
@@ -120,32 +118,27 @@ $(document).ready(
                 
                 for (const [key, value] of map)
                 {
+                    var mod_key = key.replace("#del_", ""); 
+                    form_data.append(mod_key, value); 
+
                     if (is_empty(value)) 
                     {
                         $(key).css("background-color", err_colour); 
-                        empty_count += 1; 
+                        bad_flag = 1
                     }
-                }
-                
-                if (empty_count != map.size)
-                {
-                    for (const [key, value] of map)
+                    else
                     {
                         $(key).css("background-color", "white"); 
-                    }
-
+                    } 
+                }
+                
+                if (!bad_flag)
+                {
                     $.ajax(
                         {
                             url: "/delete-form", 
                             type: "POST",
-                            data: {
-                                code:  map.get("#del_code"),
-                                name:  map.get("#del_name"),
-                                red:   map.get("#del_r"),
-                                green: map.get("#del_g"),
-                                blue:  map.get("#del_b"),
-                                rad:   map.get("#del_rad")
-                            },
+                            data: form_data, 
                             processData: false, 
                             contentType: false
                         }
