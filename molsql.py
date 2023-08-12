@@ -229,9 +229,9 @@ class Database():
 
     def fetch_all_molecules(self):
         ret_string = """
+                    <br>
                     <table style = \"width: 80%\">
                     <tr>
-                        <th> Display Buttons <th>
                         <th> Molecule Name <th>
                         <th> Atom Count <th>
                         <th> Bond Count <th>
@@ -241,7 +241,6 @@ class Database():
         
         format = f"""
                   <tr>
-                    <td><button>Display</button></td>
                     <td>%s</td>
                     <td>%d</td>
                     <td>%d</td>

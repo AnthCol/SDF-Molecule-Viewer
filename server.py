@@ -87,10 +87,9 @@ class http_server(BaseHTTPRequestHandler):
                     file = io.BytesIO(data.file.read())
                 elif (data.name == "molecule_name"):
                     name = data.value
+                    if (not db.molecule_exists(name)):
+                        db.add_molecule(name, io.TextIOWrapper(file))
                 
-            if (not db.molecule_exists(name)):
-                db.add_molecule(name, io.TextIOWrapper(file))
-                 
             self.display(self.create_page("/sdf_upload.html"))
         elif (self.path == "/add-form"): 
             
