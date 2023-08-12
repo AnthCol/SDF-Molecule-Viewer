@@ -1,7 +1,8 @@
+import os
 import sqlite3
 import molecule
 import MolDisplay
-import os
+
 
 class Database():
 
@@ -238,8 +239,7 @@ class Database():
                         <th> Select </th>
                     </tr>
 
-                    """
-        
+                    """        
         format = f"""
                   <tr>
                     <td>%s</td>

@@ -1,6 +1,5 @@
-import molecule
 import re 
-
+import molecule
 
 # radius = { 'H': 25, 
 #            'C': 40, 
@@ -190,8 +189,6 @@ class Molecule(molecule.molecule):
         data = file.read()
 
         # Regex to parse the atom info first, and then the bond info. 
-        # The regex for the bond info is not perfect, and will pick up a lot of extra info. 
-        # This problem is fixed later in this function
         a = re.findall(r"([-]?[0-9]+[.]?[0-9]+\s+[-]?[0-9]+[.]?[0-9]+\s+[-]?[0-9]+[.]?[0-9]+\s[C,H,N,O])+", data)
         b = re.findall(r"(([0-9]+\s+){6}([0-9]+\n+){1})+", data)
 

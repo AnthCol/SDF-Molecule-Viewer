@@ -1,9 +1,7 @@
 import io
 import sys
-import json
 import molsql
 import MolDisplay
-from urllib.parse import parse_qs
 from multipart import MultipartParser
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
@@ -52,7 +50,7 @@ class http_server(BaseHTTPRequestHandler):
         return
     
     
-    def post_retrieve_parse(self):
+    def parse_multipart(self):
         data = self.rfile.read(int(self.headers["Content-Length"]))
         data = MultipartParser(io.BytesIO(data), self.headers["Content-Type"].split("boundary=")[1])
         return data
@@ -78,10 +76,8 @@ class http_server(BaseHTTPRequestHandler):
     # Post method is to send data to a server the create/update a resource. 
     def do_POST(self):
         
-        post_data = self.post_retrieve_parse()
-
         if (self.path == "/sdf-form" or self.path == "/"):
-            print("PATH TAKEN\n"); 
+            post_data = self.parse_multipart() 
 
             for data in post_data:
                 if (data.name == "sdf_file"):
@@ -94,37 +90,32 @@ class http_server(BaseHTTPRequestHandler):
             self.display(self.create_page("/sdf_upload.html"))
         elif (self.path == "/add-form"): 
             
+            post_data = self.rfile.read(int(self.headers["Content-Length"]))
+            print("PRINTING POST DATA----------------------------------------------------->>>>>>>>>>>") 
+            print(post_data)
+
             data_list = [] 
             for data in post_data:
                 data_list.append(data)
             
-            if (len(data_list) != element_attributes):
-                print("BAD\n")
-
             db.add_element(data_list)
             
             self.display(self.create_page("/add_remove.html"))
-        elif (self.path == "/delete-form"):
-            
-            data_list = [] 
-            for data in post_data:
-                data_list.append(data)
+        elif (self.path == "/delete-form"): 
+            post_data = self.rfile.read(int(self.headers["Content-Length"]))
+            print("PRINTING POST DATA---------------------------------------------------->>>>>>>>>>>>>>>>>>")
+            print(post_data)
 
-            if (len(data_list) != element_attributes):
-                print("BAD\n")
-            
+            data_list = []
             db.del_element(data_list)
-
             self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/sdf-display"):
-            print("SDF DISPLAY DISPLAY THE MOLECULE OF CHOICE")
+            
             for data in post_data:
                 if (data.name == " " ):
                     print("YO\n")
 
-
         else:
-            print("taking the error path\n");  
             self.error()
 
         return 
