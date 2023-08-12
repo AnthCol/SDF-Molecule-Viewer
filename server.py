@@ -1,8 +1,6 @@
 import io
 import sys
-import cgi
 import molsql
-import urllib
 import MolDisplay
 from multipart import MultipartParser
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -94,6 +92,8 @@ class http_server(BaseHTTPRequestHandler):
                     name = data.value
                     if (not db.molecule_exists(name)):
                         db.add_molecule(name, file)
+
+            print("name = " + name)
                 
             self.display(self.create_page("/sdf_upload.html"))
         elif (self.path == "/add-form"): 
@@ -104,8 +104,7 @@ class http_server(BaseHTTPRequestHandler):
             data_list = self.generate_list(self.parse_multipart())
             db.del_element(data_list)
             self.display(self.create_page("/add_remove.html"))
-        elif (self.path == "/sdf-display"):
-            
+        elif (self.path == "/sdf-display"): 
             for data in post_data:
                 if (data.name == " " ):
                     print("YO\n")
@@ -114,9 +113,6 @@ class http_server(BaseHTTPRequestHandler):
             self.error()
 
         return 
-
-
-
 
 httpd = HTTPServer(('localhost', int(sys.argv[1])), http_server)
 httpd.serve_forever()

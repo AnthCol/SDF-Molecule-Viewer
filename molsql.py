@@ -191,23 +191,23 @@ class Database():
   
     
     def add_element(self, data_list):
-        self.conn.execute("INSERT INTO Elements WHERE ELEMENT_NO='" + data_list[0] + "' " + 
-                          "AND ELEMENT_CODE ='" + data_list[1] + "' " +
-                          "AND ELEMENT_NODE ='" + data_list[2] + "' " +
-                          "AND COLOUR1 = '" + data_list[3] + "' " + 
-                          "AND COLOUR2 = '" + data_list[4] + "' " + 
-                          "AND COLOUR3 = '" + data_list[5] + "' " +
-                          "AND RADIUS = '" +data_list[6] + "'") 
+        self.conn.execute("INSERT INTO Elements WHERE " + 
+                          "ELEMENT_CODE ='" + data_list[0] + "' " +
+                          "AND ELEMENT_NODE ='" + data_list[1] + "' " +
+                          "AND COLOUR1 = '" + data_list[2] + "' " + 
+                          "AND COLOUR2 = '" + data_list[3] + "' " + 
+                          "AND COLOUR3 = '" + data_list[4] + "' " +
+                          "AND RADIUS = '" +data_list[5] + "'") 
         return
 
     def del_element(self, data_list): 
-        self.conn.execute("DELETE * FROM Elements WHERE ELEMENT_NO='" + data_list[0] + "' " +
-                          "AND ELEMENT_CODE ='" + data_list[1] + "' " +
-                          "AND ELEMENT_NAME ='" + data_list[2] + "' " + 
-                          "AND COLOUR1 = '" + data_list[3] + "' " +
-                          "AND COLOUR2 = '" + data_list[4] + "' " +
-                          "AND COLOUR3 = '" + data_list[5] + "' " + 
-                          "AND RADIUS = '" + data_list[6] + "'")
+        self.conn.execute("DELETE FROM Elements WHERE " + 
+                          "ELEMENT_CODE ='" + data_list[0] + "' " +
+                          "AND ELEMENT_NAME ='" + data_list[1] + "' " + 
+                          "AND COLOUR1 = '" + data_list[2] + "' " +
+                          "AND COLOUR2 = '" + data_list[3] + "' " +
+                          "AND COLOUR3 = '" + data_list[4] + "' " + 
+                          "AND RADIUS = '" + data_list[5] + "'")
         return
 
     def radial_gradients(self):

@@ -13,6 +13,9 @@ import molecule
 #                  'N': 'blue'
 #                }
 
+radius = {}
+element_name = {}
+
 header = """<svg version="1.1" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">"""
 footer = """</svg>"""
 
@@ -36,8 +39,16 @@ class Atom:
     def svg(self):
         cx = (self.member_atom.x * 100) + offsetx
         cy = (self.member_atom.y * 100) + offsety
-        r = radius[self.member_atom.element]
-        fill = element_name[self.member_atom.element]
+        
+        if (self.member_atom.element in radius):
+            r = radius[self.member_atom.element]
+        else:
+            r = 10
+        
+        if (self.member_atom.element in element_name):
+            fill = element_name[self.member_atom.element]
+        else:
+            fill = "purple"
 
         return '  <circle cx="%.2f" cy="%.2f" r="%d" fill="url(#%s)"/>\n' % (cx, cy, r, fill)
 
