@@ -63,7 +63,6 @@ class http_server(BaseHTTPRequestHandler):
             page = display_header
             page += db.fetch_all_molecules()
             page += display_footer
-            print("PRINTING PAGE TO TERMINAL:\n" + page)
             self.display(page)
         elif (self.path in GET_list):
             page = self.create_page(self.path) 
@@ -82,23 +81,13 @@ class http_server(BaseHTTPRequestHandler):
         post_data = self.post_retrieve_parse()
 
         if (self.path == "/sdf-form" or self.path == "/"):
-
+            
             for data in post_data:
                 if (data.name == "sdf_file"):
                     file = io.BytesIO(data.file.read())
                 elif (data.name == "molecule_name"):
                     name = data.value
-            
-            if (len(name) == 0):
-                # TODO
-                # Make it so this does not send a 200 response. Find a way to check for lack of file input. 
-                # This might be doable in JavaScript
-                # Maybe have some sort of if-statement to check that everything is filled out, and 
-                # we will be able to interact with the HTML from there to tell the user they made a mistake. 
-                error_string = "Not enough data provided. Please make sure to add the name and file of your molecule.\n"
-                self.display(error_string)
-                return 
-
+                
             if (not db.molecule_exists(name)):
                 db.add_molecule(name, io.TextIOWrapper(file))
                  
@@ -128,7 +117,12 @@ class http_server(BaseHTTPRequestHandler):
 
             self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/sdf-display"):
-            self.display(display_header.join(db.fetch_all_molecules()).join(display_footer))
+            print("SDF DISPLAY DISPLAY THE MOLECULE OF CHOICE")
+            for data in post_data:
+                if (data.name == " " ):
+                    print("YO\n")
+
+
         else:
             self.error()
 

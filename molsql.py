@@ -254,6 +254,9 @@ class Database():
         atom_list = []
         bond_list = []
         
+        if (len(molecule_ids) == 0 or len(molecule_names) == 0):
+            return "<br><p> There are no molecules in the database. Upload a .sdf file to see information here </p>"
+
         if (len(molecule_names) == len(molecule_ids)):
             for i in range(len(molecule_ids)):
                 atom_list = self.conn.execute("SELECT ATOM_ID FROM MoleculeAtom WHERE MOLECULE_ID='" + str(molecule_ids[i]) + "'").fetchall()
