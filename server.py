@@ -1,5 +1,6 @@
 import io
 import sys
+import cgi
 import molsql
 import urllib
 import MolDisplay
@@ -94,7 +95,7 @@ class http_server(BaseHTTPRequestHandler):
 
             for key, value in post_data.iteritems():
                 print ("%s = %s" % (key, value))
-            print("DONE ITERATING OVER IT\n"); 
+            
             data_list = [] 
             for data in post_data:
                 data_list.append(data)
@@ -104,14 +105,18 @@ class http_server(BaseHTTPRequestHandler):
             self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/delete-form"): 
             
-            post_data = self.rfile.read(int(self.headers["Content-Length"])).decode("utf-8")
-            post_data = urllib.parse.parse_qs(post_data)
-        
-            print(str(post_data))
 
-            print("DONE PRINTING POST_DATA")
 
-           
+            post_data = cgi.FieldStorage(
+                fp = self.rfile, 
+                headers = self.headers, 
+                environ = {"REQUEST_METHOD" : "POST" }
+            )
+            
+            
+            print("DONE PRINTING\n")
+
+
             data_list = []
             db.del_element(data_list)
             self.display(self.create_page("/add_remove.html"))
