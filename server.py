@@ -81,7 +81,8 @@ class http_server(BaseHTTPRequestHandler):
         post_data = self.post_retrieve_parse()
 
         if (self.path == "/sdf-form" or self.path == "/"):
-            
+            print("PATH TAKEN\n"); 
+
             for data in post_data:
                 if (data.name == "sdf_file"):
                     file = io.BytesIO(data.file.read())
@@ -123,6 +124,7 @@ class http_server(BaseHTTPRequestHandler):
 
 
         else:
+            print("taking the error path\n");  
             self.error()
 
         return 

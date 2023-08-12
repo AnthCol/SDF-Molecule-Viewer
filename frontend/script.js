@@ -13,67 +13,93 @@ $(document).ready(
                 
                 var file = $("#sdf_file_input")[0].files[0]; 
                 var name = $("#sdf_molecule_name").val(); 
- 
-                if (is_empty(file) || is_empty(name)){
-                    /*
-                     * FIXME
-                     * Need to make the missing thing flash red here or something 
-                     */
-                    console.log("EMPTY PATH TAKEN\n")
-                    return; 
-                }
+               
+                var err_colour = "lightcoral"; 
 
-                form_data.append("sdf_file", file); 
-                form_data.append("molecule_name", name); 
+                if (is_empty(file) && is_empty(name))
+                {
+                    $("#sdf_file_input").css("background-color", err_colour); 
+                    $("#sdf_molecule_name").css("background-color", err_colour); 
+                }
+                else if (is_empty(file))
+                {
+                    $("#sdf_file_input").css("background-color", err_colour); 
+                    $("#sdf_molecule_name").css("background-color", "unset"); 
+                }
+                else if (is_empty(name))
+                {
+                    $("#sdf_file_input").css("background-color", "unset"); 
+                    $("#sdf_molecule_name").css("background-color", err_colour); 
+                }
+                else
+                {
+                    $("#sdf_file_input").css("background-color", "unset"); 
+                    $("#sdf_molecule_name").css("background-color", "unset"); 
+
+                    form_data.append("sdf_file", file); 
+                    form_data.append("molecule_name", name); 
                 
-                $.ajax(
-                    {
-                        url: "/sdf-form", 
-                        type: "POST",
-                        data: form_data, 
-                        processData: false, 
-                        contentType: false
-                    }
-                );
+                    $.ajax(
+                        {
+                            url: "/sdf-form", 
+                            type: "POST",
+                            data: form_data, 
+                            processData: false, 
+                            contentType: false
+                        }
+                    );
+                }
             }
         ), 
         $("#add_form").on("submit", 
             function(event)
             {
                 event.preventDefault();
-                
-                var code  = $("#add_code").val(); 
-                var name  = $("#add_name").val(); 
-                var red   = $("#add_r").val(); 
-                var green = $("#add_g").val(); 
-                var blue  = $("#add_b").val(); 
-                var rad   = $("#add_rad").val(); 
 
-                if (is_empty(code)  || is_empty(name) || is_empty(red) || 
-                    is_empty(green) || is_empty(blue) || is_empty(rad)){
-                    console.log("NEED TO FILL ALL ELEMENTS\n")
-                    /* FIXME
-                     * Need to fill all elements. Make missing one flash red or something. 
-                     */
-                    return; 
+                var err_colour = "lightcoral";
+                var bad_flag = 0; 
+
+                const map = new Map(); 
+                map.set("#add_code", $("#add_code").val()); 
+                map.set("#add_name", $("#add_name").val()); 
+                map.set("#add_r",    $("#add_r").val()); 
+                map.set("#add_g",    $("#add_g").val()); 
+                map.set("#add_b",    $("#add_b").val()); 
+                map.set("#add_rad",  $("#add_rad").val()); 
+
+                for (const [key, value] of map)
+                {
+                    if (is_empty(value))
+                    {
+                        $(key).css("background-color", err_colour); 
+                        bad_flag = 1; 
+                    }
+                    else
+                    {
+                        $(key).css("background-color", "unset"); 
+                    }
+
                 }
                 
-                $.ajax(
-                    {
-                        url: "/add-form", 
-                        type: "POST",
-                        data: {
-                            code:  code, 
-                            name:  name, 
-                            red:   red,
-                            green: green, 
-                            blue:  blue, 
-                            rad:   rad
-                        },
-                        processData: false, 
-                        contentType: false
-                    }
-                );
+                if (!bad_flag)
+                {
+                    $.ajax(
+                        {
+                            url: "/add-form", 
+                            type: "POST",
+                            data: {
+                                code:  map.get("#add_code"), 
+                                name:  map.get("#add_name"),  
+                                red:   map.get("#add_r"),
+                                green: map.get("#add_g"), 
+                                blue:  map.get("#add_b"), 
+                                rad:   map.get("#add_rad")
+                            },
+                            processData: false, 
+                            contentType: false
+                        }
+                    );
+                }
             }
         ), 
         $("#delete_form").on("submit", 
@@ -81,38 +107,50 @@ $(document).ready(
             {
                 event.preventDefault(); 
                 
-                var code  = $("#del_code").val(); 
-                var name  = $("#del_name").val(); 
-                var red   = $("#del_r").val(); 
-                var green = $("#del_g").val(); 
-                var blue  = $("#del_b").val(); 
-                var rad   = $("#del_rad").val(); 
+                err_colour = "lightcoral"; 
+                empty_count = 0; 
 
-                if (is_empty(code)  && is_empty(name) && is_empty(red) && 
-                    is_empty(green) && is_empty(blue) && is_empty(rad)){
-                    console.log("NO INPUTS\n"); 
-                    /* FIXME
-                     * Need to do something when user doesn't input everything but presses delete
-                     */
-                    return; 
+                const map = new Map(); 
+                map.set("#del_code", $("#del_code").val()); 
+                map.set("#del_name", $("#del_name").val()); 
+                map.set("#del_r",    $("#del_r").val()); 
+                map.set("#del_g",    $("#del_g").val()); 
+                map.set("#del_b",    $("#del_b").val()); 
+                map.set("#del_rad",  $("#del_rad").val()); 
+                
+                for (const [key, value] of map)
+                {
+                    if (is_empty(value)) 
+                    {
+                        $(key).css("background-color", err_colour); 
+                        empty_count += 1; 
+                    }
                 }
                 
-                $.ajax(
+                if (empty_count != map.size)
+                {
+                    for (const [key, value] of map)
                     {
-                        url: "/delete-form", 
-                        type: "POST",
-                        data: {
-                            code:  code,
-                            name:  name,
-                            red:   red,
-                            green: green,
-                            blue:  blue,
-                            rad:   rad
-                        },
-                        processData: false, 
-                        contentType: false
+                        $(key).css("background-color", "unset"); 
                     }
-                );
+
+                    $.ajax(
+                        {
+                            url: "/delete-form", 
+                            type: "POST",
+                            data: {
+                                code:  map.get("#del_code"),
+                                name:  map.get("#del_name"),
+                                red:   map.get("#del_r"),
+                                green: map.get("#del_g"),
+                                blue:  map.get("#del_b"),
+                                rad:   map.get("#del_rad")
+                            },
+                            processData: false, 
+                            contentType: false
+                        }
+                    );
+                }
             }
         )/*, 
         $("#display_button").on("click", 
