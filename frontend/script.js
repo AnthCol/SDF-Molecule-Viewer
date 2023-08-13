@@ -38,7 +38,9 @@ $(document).ready(
 
                     form_data.append("sdf_file", file); 
                     form_data.append("molecule_name", name); 
-                
+                    
+                    alert("Submission successful!"); 
+
                     $.ajax(
                         {
                             url: "/sdf-form", 
@@ -87,6 +89,9 @@ $(document).ready(
                 
                 if (!bad_flag)
                 {
+                    
+                    alert("Submission successful!");
+
                     $.ajax(
                         {
                             url: "/add-form", 
@@ -134,6 +139,8 @@ $(document).ready(
                 
                 if (!bad_flag)
                 {
+                    alert("Submission succesful!"); 
+
                     $.ajax(
                         {
                             url: "/delete-form", 
@@ -145,22 +152,35 @@ $(document).ready(
                     );
                 }
             }
-        )/*, 
-        $("#display_button").on("click", 
+        ), 
+        $("#display_form").on("submit", 
             function(event)
             {
                 event.preventDefault(); 
-                $.ajax(
-                    {
-                        url: "/svg-display", 
-                        type: "POST"
-                        data: // FIXME unfinished  
-                        processData: false, 
-                        contentType: false
-                    }
-                );
+                var checked = $("input[name=display_choice]:checked").val(); 
+                var err_colour = "lightcoral";  
+
+                if (typeof checked === "undefined")
+                {
+                    $("#display_button").css("background-color", err_colour); 
+                }
+                else
+                {
+                    var form_data = new FormData(); 
+                    form_data.append("mol_name", checked);
+                    
+                    $.ajax(
+                        {
+                            url: "/svg-display", 
+                            type: "POST",
+                            data: form_data,
+                            processData: false, 
+                            contentType: false
+                        }
+                    );
+                }
             }
-        );*/ 
+        ); 
     }  
 ); 
 

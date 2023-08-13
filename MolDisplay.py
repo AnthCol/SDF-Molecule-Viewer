@@ -50,7 +50,7 @@ class Atom:
         else:
             fill = "purple"
 
-        return '  <circle cx="%.2f" cy="%.2f" r="%d" fill="url(#%s)"/>\n' % (cx, cy, r, fill)
+        return '  <circle cx="%.2f" cy="%.2f" r="%d" fill="%s"/>\n' % (cx, cy, r, fill)
 
 class Bond:
     def __init__(self, c_bond):

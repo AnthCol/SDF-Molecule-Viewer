@@ -230,14 +230,17 @@ class Database():
 
     def fetch_all_molecules(self):
         ret_string = """
+                    <p> Select a molecule from the table below and hit the "Display" button to display it. </p>
+                    <br>
+                    <form method = "POST" id = "display_form" enctype = "multipart/form-data"/ >
+                    <input id = "display_button" type = "submit" value = "Display" />
                     <br><br>
-                    <form>
                     <table style = \"width: 80%\">
                     <tr>
                         <th> Molecule Name </th>
                         <th> Atom Count </th>
                         <th> Bond Count </th>
-                        <th> Select Display </th>
+                        <th> Select Molecule </th>
                     </tr>
 
                     """        
@@ -246,7 +249,7 @@ class Database():
                     <td><center>%s</center></td>
                     <td><center>%d</center></td>
                     <td><center>%d</center></td>
-                    <td><center><input type="radio" id="%s" name="display_choice"/></center></td>
+                    <td><center><input type="radio" name="display_choice" value="%s"/></center></td>
                   </tr>
                   """
         
@@ -258,7 +261,7 @@ class Database():
 
         for i in range(len(molecule_names)):
             m = self.load_mol(molecule_names[i][0]) 
-            ret_string += format % (molecule_names[i][0], m.atom_no, m.bond_no, molecule_names[i][0])
+            ret_string += format % (molecule_names[i][0], m.atom_no, m.bond_no,  molecule_names[i][0])
 
 
         ret_string += "</table></form>"

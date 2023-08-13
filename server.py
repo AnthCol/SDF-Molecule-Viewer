@@ -23,7 +23,12 @@ GET_list.append("/script.js")
 fptr = open(prefix + "/select_display.html")
 display_header = fptr.read()
 fptr.close()
-display_footer = "</body></html>"
+    
+fptr = open(prefix + "/svg_display.html")
+svg_header = fptr.read()
+fptr.close()
+
+html_footer = "</body></html>"
 
 class http_server(BaseHTTPRequestHandler):
     
@@ -36,6 +41,14 @@ class http_server(BaseHTTPRequestHandler):
     def display(self, page):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
+        self.send_header("Content-length", len(page))
+        self.end_headers()
+        self.wfile.write(bytes(page, "utf-8"))
+        return
+    
+    def display_svg(self, page):
+        self.send_response(200)
+        self.send_header("Content-type", "image/svg+xml")
         self.send_header("Content-length", len(page))
         self.end_headers()
         self.wfile.write(bytes(page, "utf-8"))
@@ -66,7 +79,7 @@ class http_server(BaseHTTPRequestHandler):
         if (self.path == "/select_display.html"):
             page = display_header
             page += db.fetch_all_molecules()
-            page += display_footer
+            page += html_footer
             self.display(page)
         elif (self.path in GET_list):
             page = self.create_page(self.path) 
@@ -77,7 +90,7 @@ class http_server(BaseHTTPRequestHandler):
         else:
             self.error()
         
-        return 
+        return
 
     # Post method is to send data to a server the create/update a resource. 
     def do_POST(self):
@@ -92,23 +105,24 @@ class http_server(BaseHTTPRequestHandler):
                     name = data.value
                     if (not db.molecule_exists(name)):
                         db.add_molecule(name, file)
-
-            print("name = " + name)
-                
+ 
             self.display(self.create_page("/sdf_upload.html"))
         elif (self.path == "/add-form"): 
-            data_list = self.generate_list(self.parse_multipart()) 
+            data_list = self.generate_list(self.parse_multipart())
             db.add_element(data_list)
             self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/delete-form"):  
             data_list = self.generate_list(self.parse_multipart())
             db.del_element(data_list)
             self.display(self.create_page("/add_remove.html"))
-        elif (self.path == "/sdf-display"): 
-            for data in post_data:
-                if (data.name == " " ):
-                    print("YO\n")
-
+        elif (self.path == "/svg-display"): 
+            data_list = self.generate_list(self.parse_multipart()) 
+            page = svg_header
+            mol = db.load_mol(data_list[0])
+            page += mol.svg()
+            page += html_footer
+            print("PRINTING PAGE: " + page)
+            self.display(page)
         else:
             self.error()
 
