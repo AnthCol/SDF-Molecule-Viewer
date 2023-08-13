@@ -231,21 +231,22 @@ class Database():
     def fetch_all_molecules(self):
         ret_string = """
                     <br><br>
+                    <form>
                     <table style = \"width: 80%\">
                     <tr>
                         <th> Molecule Name </th>
                         <th> Atom Count </th>
                         <th> Bond Count </th>
-                        <th> Select </th>
+                        <th> Select Display </th>
                     </tr>
 
                     """        
         format = f"""
                   <tr>
-                    <td>%s</td>
-                    <td>%d</td>
-                    <td>%d</td>
-                    <td><button> Select </button></td>
+                    <td><center>%s</center></td>
+                    <td><center>%d</center></td>
+                    <td><center>%d</center></td>
+                    <td><center><input type="radio" id="%s" name="display_choice"/></center></td>
                   </tr>
                   """
         
@@ -257,10 +258,10 @@ class Database():
 
         for i in range(len(molecule_names)):
             m = self.load_mol(molecule_names[i][0]) 
-            ret_string += format % (molecule_names[i][0], m.atom_no, m.bond_no)
+            ret_string += format % (molecule_names[i][0], m.atom_no, m.bond_no, molecule_names[i][0])
 
 
-        ret_string += "</table>"
+        ret_string += "</table></form>"
         return ret_string; 
 
 
