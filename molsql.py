@@ -230,7 +230,7 @@ class Database():
 
     def fetch_all_molecules(self):
         ret_string = """
-                    <br>
+                    <br><br>
                     <table style = \"width: 80%\">
                     <tr>
                         <th> Molecule Name </th>
@@ -250,19 +250,15 @@ class Database():
                   """
         
     
-        molecule_ids = self.conn.execute("SELECT MOLECULE_ID FROM Molecules").fetchall()
         molecule_names = self.conn.execute("SELECT NAME FROM Molecules").fetchall()
-        atom_list = []
-        bond_list = []
         
-        if (len(molecule_ids) == 0 or len(molecule_names) == 0):
+        if (len(molecule_names) == 0):
             return "<br><p> There are no molecules in the database. Upload a .sdf file to see information here </p>"
 
-        if (len(molecule_names) == len(molecule_ids)):
-            for i in range(len(molecule_ids)):
-                atom_list = self.conn.execute("SELECT ATOM_ID FROM MoleculeAtom WHERE MOLECULE_ID='" + str(molecule_ids[i]) + "'").fetchall()
-                bond_list = self.conn.execute("SELECT BOND_ID FROM MoleculeBond WHERE MOLECULE_ID='" + str(molecule_ids[i]) + "'").fetchall()
-                ret_string += format % (molecule_names[i], len(atom_list), len(bond_list))
+        for i in range(len(molecule_names)):
+            m = self.load_mol(molecule_names[i][0]) 
+            ret_string += format % (molecule_names[i][0], m.atom_no, m.bond_no)
+
 
         ret_string += "</table>"
         return ret_string; 

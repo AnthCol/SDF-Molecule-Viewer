@@ -24,7 +24,7 @@ $(document).ready(
                 else if (is_empty(file))
                 {
                     $("#sdf_file_input").css("background-color", err_colour); 
-                    $("#sdf_molecule_name").css("background-color", "unset"); 
+                    $("#sdf_molecule_name").css("background-color", "white"); 
                 }
                 else if (is_empty(name))
                 {
@@ -34,7 +34,7 @@ $(document).ready(
                 else
                 {
                     $("#sdf_file_input").css("background-color", "unset"); 
-                    $("#sdf_molecule_name").css("background-color", "unset"); 
+                    $("#sdf_molecule_name").css("background-color", "white"); 
 
                     form_data.append("sdf_file", file); 
                     form_data.append("molecule_name", name); 
