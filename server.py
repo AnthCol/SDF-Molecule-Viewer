@@ -46,10 +46,10 @@ class http_server(BaseHTTPRequestHandler):
         self.wfile.write(bytes(page, "utf-8"))
         return
     
-    def display_svg(self, page):
+    def display_svg(self, page): 
         self.send_response(200)
-        self.send_header("Content-type", "image/svg+xml")
-        self.send_header("Content-length", len(page))
+        self.send_header("Content-type", "text/html")
+        self.send_header("Content-length", len(page)) 
         self.end_headers()
         self.wfile.write(bytes(page, "utf-8"))
         return
@@ -117,12 +117,9 @@ class http_server(BaseHTTPRequestHandler):
             self.display(self.create_page("/add_remove.html"))
         elif (self.path == "/svg-display"): 
             data_list = self.generate_list(self.parse_multipart()) 
-            page = svg_header
             mol = db.load_mol(data_list[0])
-            page += mol.svg()
-            page += html_footer
-            print("PRINTING PAGE: " + page)
-            self.display(page)
+            page = svg_header + mol.svg() + html_footer 
+            self.display_svg(page)
         else:
             self.error()
 
