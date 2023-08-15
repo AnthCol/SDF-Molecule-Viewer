@@ -11,13 +11,8 @@ db.create_tables()
 GET_list  = ["/add_remove.html", "/sdf_upload.html", "/select_display.html", "/style.css", "/script.js"]
 prefix    = "frontend"
 
-fptr = open(prefix + "/select_display.html")
-display_header = fptr.read()
-fptr.close()
-    
-fptr = open(prefix + "/svg_display.html")
-svg_header = fptr.read()
-fptr.close()
+with open(prefix + "/select_display.html") as fptr:
+    display_header = fptr.read()
 
 html_footer = "</body></html>"
 
@@ -51,8 +46,7 @@ class http_server(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(bytes("404: not found", "utf-8"))
         return
-    
-    
+     
     def parse_multipart(self):
         data = self.rfile.read(int(self.headers["Content-Length"]))
         data = MultipartParser(io.BytesIO(data), self.headers["Content-Type"].split("boundary=")[1])
@@ -120,11 +114,9 @@ class http_server(BaseHTTPRequestHandler):
         elif (self.path == "/svg-display"): 
             data_list = self.generate_list(self.parse_multipart()) 
             mol = db.load_mol(data_list[0])
-            fptr = open(prefix + "/svg_temp.html", "w")
-            fptr.write(mol.svg(element_map))
-            fptr.close()
+            with open (prefix + "/svg_temp.html", "w") as fptr:
+                fptr.write(mol.svg(element_map))
             self.display(display_header + db.fetch_all_molecules() + html_footer)
-            #self.display_svg(self.create_page("/svg_temp.html"))
         else:
             self.error()
 

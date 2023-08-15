@@ -44,6 +44,7 @@ class Atom:
             r = element_map[self.member_atom.element][0]
             fill = "#" + element_map[self.member_atom.element][1] 
         else:
+            #defaults
             r = 40
             fill = "#800080"
         
@@ -77,7 +78,6 @@ class Bond:
 
         # t = top b = bottom
         # l = left r = right 
-
 
         tl_x = (x1) + (dy) + offsetx
         tl_y = (y1) - (dx) + offsety
