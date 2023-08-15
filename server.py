@@ -8,17 +8,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 db = molsql.Database(reset=True)
 db.create_tables()
 
-GET_list  = []
-POST_list = []
+GET_list  = ["/add_remove.html", "/sdf_upload.html", "/select_display.html", "/style.css", "/script.js"]
 prefix    = "frontend"
-CSS_FILE  = "style.css"
-JS_FILE   = "script.js"
-
-GET_list.append("/add_remove.html")
-GET_list.append("/sdf_upload.html")
-GET_list.append("/select_display.html")
-GET_list.append("/style.css")
-GET_list.append("/script.js")
 
 fptr = open(prefix + "/select_display.html")
 display_header = fptr.read()
@@ -29,6 +20,16 @@ svg_header = fptr.read()
 fptr.close()
 
 html_footer = "</body></html>"
+
+element_map = {}
+
+ELEMENT_CODE = 0
+ELEMENT_NAME = 1
+ELEMENT_R    = 2
+ELEMENT_G    = 3
+ELEMENT_B    = 4
+ELEMENT_RAD  = 5
+
 
 class http_server(BaseHTTPRequestHandler):
     
@@ -48,7 +49,7 @@ class http_server(BaseHTTPRequestHandler):
     
     def display_svg(self, page): 
         self.send_response(200)
-        self.send_header("Content-type", "text/html")
+        self.send_header("Content-type", "image/svg+xml")
         self.send_header("Content-length", len(page)) 
         self.end_headers()
         self.wfile.write(bytes(page, "utf-8"))
@@ -73,6 +74,9 @@ class http_server(BaseHTTPRequestHandler):
             data_list.append(data.value)
 
         return data_list
+
+    def generate_hex(self, r, g, b):
+        return "%02x%02x%02x" % (r, g, b)
 
     # Get method isto request data from a specified resource.  
     def do_GET(self):
@@ -104,21 +108,30 @@ class http_server(BaseHTTPRequestHandler):
                 elif (data.name == "molecule_name"):
                     name = data.value
                     if (not db.molecule_exists(name)):
-                        db.add_molecule(name, file)
- 
+                        db.add_molecule(name, file) 
             self.display(self.create_page("/sdf_upload.html"))
+
         elif (self.path == "/add-form"): 
             data_list = self.generate_list(self.parse_multipart())
-            db.add_element(data_list)
+            db.add_element(data_list) 
+
+            hex_code = self.generate_hex(data_list[ELEMENT_R], data_list[ELEMENT_G], data_list[ELEMENT_B])
+            temp_list = [hex_code, data_list[ELEMENT_RAD]]
+
+            element_map[data_list[ELEMENT_CODE]] = temp_list 
             self.display(self.create_page("/add_remove.html"))
+
         elif (self.path == "/delete-form"):  
             data_list = self.generate_list(self.parse_multipart())
             db.del_element(data_list)
+            del element_map[data_list[ELEMENT_CODE]] 
             self.display(self.create_page("/add_remove.html"))
+
         elif (self.path == "/svg-display"): 
             data_list = self.generate_list(self.parse_multipart()) 
             mol = db.load_mol(data_list[0])
-            page = svg_header + mol.svg() + html_footer 
+            page = mol.svg(element_map)
+            print("printing page server side " + page)
             self.display_svg(page)
         else:
             self.error()

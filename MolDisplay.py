@@ -36,21 +36,19 @@ class Atom:
         z = self.member_atom.z
         return "[element] = " + e + " | [x-value] = " + x + " | [y-value] = " + y + " | [z-value] = " + z + "\n"
     
-    def svg(self):
+    def svg(self, element_map):
         cx = (self.member_atom.x * 100) + offsetx
         cy = (self.member_atom.y * 100) + offsety
         
-        if (self.member_atom.element in radius):
-            r = radius[self.member_atom.element]
+        if (self.member_atom.element in element_map):
+            r = element_map[self.member_atom.element][0]
+            fill = "%" + element_map[self.member_atom.element][1] 
         else:
             r = 40
+            fill = "%800080"
         
-        if (self.member_atom.element in element_name):
-            fill = element_name[self.member_atom.element]
-        else:
-            fill = "purple"
-
-        return '  <circle cx="%.2f" cy="%.2f" r="%d" fill="%s"/>\n' % (cx, cy, r, fill)
+        ret_string = '  <circle cx="%.2f" cy="%.2f" r="%d" fill="%s"/>' % (cx, cy, r, fill)
+        return ret_string
 
 class Bond:
     def __init__(self, c_bond):
@@ -108,7 +106,7 @@ class Bond:
             bl_x = (x1) + (dy) + offsetx
             bl_y = (y1) - (dx) + offsety
 
-            return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>\n' % (tl_x, tl_y, bl_x, bl_y, br_x, br_y, tr_x, tr_y)
+            return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>' % (tl_x, tl_y, bl_x, bl_y, br_x, br_y, tr_x, tr_y)
         # when they are equal horizontally or vertically. 
         elif (x1 == x2 or y1 == y2):
             tl_x = (x1) - (dy) + offsetx
@@ -123,7 +121,7 @@ class Bond:
             bl_x = (x1) + (dy) + offsetx
             bl_y = (y1) + (dx) + offsety 
 
-        return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>\n' % (bl_x, bl_y, tl_x, tl_y, tr_x, tr_y, br_x, br_y)
+        return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>' % (bl_x, bl_y, tl_x, tl_y, tr_x, tr_y, br_x, br_y)
 
 
 class Molecule(molecule.molecule):
@@ -151,7 +149,7 @@ class Molecule(molecule.molecule):
         return 
 
 
-    def svg(self):
+    def svg(self, element_map):
 
         atom_list = []
         bond_list = []
@@ -174,7 +172,7 @@ class Molecule(molecule.molecule):
         while (i < self.atom_no and j < self.bond_no):  
             if (atom_list[i].z < bond_list[j].z):
                 a = Atom(atom_list[i])
-                ret += a.svg()
+                ret += a.svg(element_map)
                 i += 1
             else:
                 b = Bond(bond_list[j])
@@ -183,7 +181,7 @@ class Molecule(molecule.molecule):
         
         while (i < self.atom_no):
             a = Atom(atom_list[i])
-            ret += a.svg()
+            ret += a.svg(element_map)
             i += 1
         while (j < self.bond_no):
             b = Bond(bond_list[j])
