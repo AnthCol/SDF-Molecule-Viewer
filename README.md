@@ -1,8 +1,11 @@
 # SDF-Molecule-Viewer
 
 
-This project was the final project for CIS*2750  at the University of Guelph. 
+This project was the final project for CIS*2750 at the University of Guelph. 
 This version is an upgraded version of the one I submitted for the course. 
+
+It is a fullstack web
+
 
 ### How to run
 
@@ -12,18 +15,21 @@ Step 1:
     - multipart package (pip install multipart)
 
 Step 2:
-    Run the "make" command in the terminal (you may need to update the python paths in the makefile)
+    Run the ``make`` command in the terminal (you may need to update the python paths in the makefile)
 
 Step 3:
     Run the following export command in the terminal:
-        export LD_LIBRARY_PATH=.
+       ``` export LD_LIBRARY_PATH=.```
 
 Step 4:
     Run the program, specifying what port you want the server running on:
-    python3 server.py <port_no>
+    ```python3 server.py <port_no>```
 
 Step 5:
-    Visit http://localhost:<port_no> 
+    Visit ```http://localhost:<port_no>``` 
+
+
+At this point, you can interact with the website in any way that you would like. If you want to view the SVG that is generated, navigate to the "frontend" folder of the project, and open the file named "svg_temp.html"
 
 ### Credits
 The molecule.i file was not written by me, it was written by Dr. Stefan Kremer at the University of Guelph. 
