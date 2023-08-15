@@ -233,7 +233,7 @@ class Database():
                     <p> Select a molecule from the table below and hit the "Display" button to display it. </p>
                     <br>
                     <form method = "POST" id = "display_form" enctype = "multipart/form-data"/ >
-                    <input id = "display_button" type = "submit" value = "Display" />
+                    <input id = "display_button" type = "submit" value = "Generate" />
                     <br><br>
                     <table style = \"width: 80%\">
                     <tr>

@@ -16,7 +16,7 @@ import molecule
 radius = {}
 element_name = {}
 
-header = """<svg version="1.1" width="750" height="750" xmlns="http://www.w3.org/2000/svg">"""
+header = """<svg version="1.1" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">"""
 footer = """</svg>"""
 
 offsetx = 500
@@ -42,12 +42,12 @@ class Atom:
         
         if (self.member_atom.element in element_map):
             r = element_map[self.member_atom.element][0]
-            fill = "%" + element_map[self.member_atom.element][1] 
+            fill = "#" + element_map[self.member_atom.element][1] 
         else:
             r = 40
-            fill = "%800080"
+            fill = "#800080"
         
-        ret_string = '  <circle cx="%.2f" cy="%.2f" r="%d" fill="%s"/>' % (cx, cy, r, fill)
+        ret_string = '  <circle cx="%.2f" cy="%.2f" r="%d" fill="blue"/>' % (cx, cy, r) # fill
         return ret_string
 
 class Bond:
@@ -80,46 +80,46 @@ class Bond:
 
 
         # point 2 is northeast or southwest 
-        if ((x1 < x2 and y1 > y2) or (x1 > x2 and y1 < y2)):
-            tl_x = (x1) + (dy) + offsetx
-            tl_y = (y1) - (dx) + offsety
+        # if ((x1 < x2 and y1 > y2) or (x1 > x2 and y1 < y2)):
+        tl_x = (x1) + (dy) + offsetx
+        tl_y = (y1) - (dx) + offsety
 
-            tr_x = (x2) + (dy) + offsetx
-            tr_y = (y2) - (dx) + offsety
+        tr_x = (x2) + (dy) + offsetx
+        tr_y = (y2) - (dx) + offsety
 
-            br_x = (x2) - (dy) + offsetx
-            br_y = (y2) + (dx) + offsety
+        br_x = (x2) - (dy) + offsetx
+        br_y = (y2) + (dx) + offsety
 
-            bl_x = (x1) - (dy) + offsetx
-            bl_y = (y1) + (dx) + offsety 
+        bl_x = (x1) - (dy) + offsetx
+        bl_y = (y1) + (dx) + offsety 
         # point 2 is northwest or southeast 
-        elif ((x1 < x2 and y1 < y2) or (x1 > x2 and y1 > y2)):
-            tl_x = (x1) - (dy) + offsetx
-            tl_y = (y1) + (dx) + offsety
+        # elif ((x1 < x2 and y1 < y2) or (x1 > x2 and y1 > y2)):
+            # tl_x = (x1) - (dy) + offsetx
+            # tl_y = (y1) + (dx) + offsety
 
-            tr_x = (x2) - (dy) + offsetx
-            tr_y = (y2) + (dx) + offsety
+            # tr_x = (x2) - (dy) + offsetx
+            # tr_y = (y2) + (dx) + offsety
 
-            br_x = (x2) + (dy) + offsetx
-            br_y = (y2) - (dx) + offsety
+            # br_x = (x2) + (dy) + offsetx
+            # br_y = (y2) - (dx) + offsety
 
-            bl_x = (x1) + (dy) + offsetx
-            bl_y = (y1) - (dx) + offsety
+            # bl_x = (x1) + (dy) + offsetx
+            # bl_y = (y1) - (dx) + offsety
 
-            return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>' % (tl_x, tl_y, bl_x, bl_y, br_x, br_y, tr_x, tr_y)
+            # return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>' % (tl_x, tl_y, bl_x, bl_y, br_x, br_y, tr_x, tr_y)
         # when they are equal horizontally or vertically. 
-        elif (x1 == x2 or y1 == y2):
-            tl_x = (x1) - (dy) + offsetx
-            tl_y = (y1) - (dx) + offsety
+        # elif (x1 == x2 or y1 == y2):
+            # tl_x = (x1) - (dy) + offsetx
+            # tl_y = (y1) - (dx) + offsety
 
-            tr_x = (x2) - (dy) + offsetx
-            tr_y = (y2) - (dx) + offsety
+            # tr_x = (x2) - (dy) + offsetx
+            # tr_y = (y2) - (dx) + offsety
 
-            br_x = (x2) + (dy) + offsetx
-            br_y = (y2) + (dx) + offsety
+            # br_x = (x2) + (dy) + offsetx
+            # br_y = (y2) + (dx) + offsety
 
-            bl_x = (x1) + (dy) + offsetx
-            bl_y = (y1) + (dx) + offsety 
+            # bl_x = (x1) + (dy) + offsetx
+            # bl_y = (y1) + (dx) + offsety 
 
         return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>' % (bl_x, bl_y, tl_x, tl_y, tr_x, tr_y, br_x, br_y)
 

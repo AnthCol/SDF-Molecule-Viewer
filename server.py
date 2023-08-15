@@ -42,19 +42,10 @@ class http_server(BaseHTTPRequestHandler):
     def display(self, page):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
-        self.send_header("Content-length", len(page))
         self.end_headers()
         self.wfile.write(bytes(page, "utf-8"))
         return
     
-    def display_svg(self, page): 
-        self.send_response(200)
-        self.send_header("Content-type", "image/svg+xml")
-        self.send_header("Content-length", len(page)) 
-        self.end_headers()
-        self.wfile.write(bytes(page, "utf-8"))
-        return
-
     def error(self):
         self.send_response(404)
         self.end_headers()
@@ -126,13 +117,14 @@ class http_server(BaseHTTPRequestHandler):
             db.del_element(data_list)
             del element_map[data_list[ELEMENT_CODE]] 
             self.display(self.create_page("/add_remove.html"))
-
         elif (self.path == "/svg-display"): 
             data_list = self.generate_list(self.parse_multipart()) 
             mol = db.load_mol(data_list[0])
-            page = mol.svg(element_map)
-            print("printing page server side " + page)
-            self.display_svg(page)
+            fptr = open(prefix + "/svg_temp.html", "w")
+            fptr.write(mol.svg(element_map))
+            fptr.close()
+            self.display(display_header + db.fetch_all_molecules() + html_footer)
+            #self.display_svg(self.create_page("/svg_temp.html"))
         else:
             self.error()
 
