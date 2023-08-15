@@ -79,8 +79,6 @@ class Bond:
         # l = left r = right 
 
 
-        # point 2 is northeast or southwest 
-        # if ((x1 < x2 and y1 > y2) or (x1 > x2 and y1 < y2)):
         tl_x = (x1) + (dy) + offsetx
         tl_y = (y1) - (dx) + offsety
 
@@ -92,35 +90,7 @@ class Bond:
 
         bl_x = (x1) - (dy) + offsetx
         bl_y = (y1) + (dx) + offsety 
-        # point 2 is northwest or southeast 
-        # elif ((x1 < x2 and y1 < y2) or (x1 > x2 and y1 > y2)):
-            # tl_x = (x1) - (dy) + offsetx
-            # tl_y = (y1) + (dx) + offsety
-
-            # tr_x = (x2) - (dy) + offsetx
-            # tr_y = (y2) + (dx) + offsety
-
-            # br_x = (x2) + (dy) + offsetx
-            # br_y = (y2) - (dx) + offsety
-
-            # bl_x = (x1) + (dy) + offsetx
-            # bl_y = (y1) - (dx) + offsety
-
-            # return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>' % (tl_x, tl_y, bl_x, bl_y, br_x, br_y, tr_x, tr_y)
-        # when they are equal horizontally or vertically. 
-        # elif (x1 == x2 or y1 == y2):
-            # tl_x = (x1) - (dy) + offsetx
-            # tl_y = (y1) - (dx) + offsety
-
-            # tr_x = (x2) - (dy) + offsetx
-            # tr_y = (y2) - (dx) + offsety
-
-            # br_x = (x2) + (dy) + offsetx
-            # br_y = (y2) + (dx) + offsety
-
-            # bl_x = (x1) + (dy) + offsetx
-            # bl_y = (y1) + (dx) + offsety 
-
+        
         return '  <polygon points="%.2f,%.2f %.2f,%.2f %.2f,%.2f %.2f,%.2f" fill="green"/>' % (bl_x, bl_y, tl_x, tl_y, tr_x, tr_y, br_x, br_y)
 
 
