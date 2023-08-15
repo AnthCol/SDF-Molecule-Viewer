@@ -9,9 +9,10 @@ It is a full-stack web application that will generate and save custom (in the se
 
 Step 1:
     Install the following if you do not have them already:
-    - swig version 3.0 or higher
-    - multipart package (```pip install multipart```)
-
+    <ol>
+        <li>swig version 3.0 or higheri</li>
+        <li>multipart package (```pip install multipart```)</li>
+    </ol>
 Step 2:
     Run the ```make``` command in the terminal (you may need to update the python paths in the makefile)
 
