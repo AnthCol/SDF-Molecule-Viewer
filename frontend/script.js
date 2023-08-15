@@ -72,8 +72,8 @@ $(document).ready(
 
                 for (const [key, value] of map)
                 {
-
-                    form_data.append(value)
+                    var mod_key = key.replace("#add_", ""); 
+                    form_data.append(mod_key, value); 
 
                     if (is_empty(value))
                     {

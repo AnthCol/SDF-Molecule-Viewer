@@ -48,7 +48,7 @@ class Atom:
             r = 40
             fill = "#800080"
         
-        ret_string = '  <circle cx="%.2f" cy="%.2f" r="%d" fill="blue"/>' % (cx, cy, r) # fill
+        ret_string = '  <circle cx="%.2f" cy="%.2f" r="%d" fill="%s"/>' % (cx, cy, int(r), fill)
         return ret_string
 
 class Bond:

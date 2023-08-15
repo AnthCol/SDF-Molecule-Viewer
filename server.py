@@ -61,7 +61,7 @@ class http_server(BaseHTTPRequestHandler):
         return data_list
 
     def generate_hex(self, r, g, b):
-        return "%02x%02x%02x" % (r, g, b)
+        return "%02x%02x%02x" % (int(r), int(g), int(b))
 
     # Get method isto request data from a specified resource.  
     def do_GET(self):
@@ -101,9 +101,10 @@ class http_server(BaseHTTPRequestHandler):
             db.add_element(data_list) 
 
             hex_code = self.generate_hex(data_list[ELEMENT_R], data_list[ELEMENT_G], data_list[ELEMENT_B])
-            temp_list = [hex_code, data_list[ELEMENT_RAD]]
+            temp_list = [data_list[ELEMENT_RAD], hex_code]
+            element_map[data_list[ELEMENT_CODE]] = temp_list    
 
-            element_map[data_list[ELEMENT_CODE]] = temp_list 
+            print("PRINTING MAP IN ADD: " + str(element_map))
             self.display(self.create_page("/add_remove.html"))
 
         elif (self.path == "/delete-form"):  
