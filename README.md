@@ -10,7 +10,7 @@ It is a full-stack web application that will generate and save custom (in the se
 Step 1:
     Install the following if you do not have them already:
     <ol>
-        <li>swig version 3.0 or higheri</li>
+        <li>swig version 3.0 or higher</li>
         <li>multipart package (```pip install multipart```)</li>
     </ol>
 Step 2:
